@@ -1,8 +1,10 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-class CreateUsersTable extends Migration
+
+class CreateChatroomUser extends Migration
 {
     /**
      * Run the migrations.
@@ -11,16 +13,16 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('USER', function (Blueprint $table) {
+        Schema::create('CHATROOM_USER', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
+            $table->unsignedBigInteger('idu');
+            $table->unsignedBigInteger('idc');
             $table->timestamps();
+            $table->foreign('idu')->references('id')->on('USER')->change();
+            $table->foreign('idc')->references('id')->on('CHATROOM')->change();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -28,6 +30,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('USER');
+        Schema::dropIfExists('CHATROOM_USER');
     }
 }
