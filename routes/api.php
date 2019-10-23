@@ -35,6 +35,12 @@ Route::post('message', 'MessageController@store');
 Route::put('message/{message}', 'MessageController@update');
 Route::delete('message/{message}', 'MessageController@delete');
 
+Route::get('app-productivity-type', 'AppProductivityTypeController@index');
+Route::get('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@show');
+Route::post('app-productivity-type', 'AppProductivityTypeController@store');
+Route::put('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@update');
+Route::delete('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@destroy');
+
 Route::get('chatroom', 'ChatroomController@index');
 Route::get('chatroom/{chatroom}', 'ChatroomController@show');
 Route::post('chatroom', 'ChatroomController@store');
