@@ -13,9 +13,22 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+Route::post('login', 'API\UserController@login');
+Route::post('register', 'API\UserController@register');
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('details', 'API\UserController@details');
 });
+
+Route::get('daily-scrum-report', 'DailyScrumReportController@index');
+Route::get('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@show');
+Route::post('daily-scrum-report', 'DailyScrumReportController@store');
+Route::put('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@update');
+Route::delete('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@delete');
+
 Route::get('message', 'MessageController@index');
 Route::get('message/{message}', 'MessageController@show');
 Route::post('message', 'MessageController@store');
@@ -27,3 +40,9 @@ Route::get('chatroom/{chatroom}', 'ChatroomController@show');
 Route::post('chatroom', 'ChatroomController@store');
 Route::put('chatroom/{chatroom}', 'ChatroomController@update');
 Route::delete('chatroom/{chatroom}', 'ChatroomController@delete');
+
+Route::get('chatroom-user', 'ChatroomUserController@index');
+Route::get('chatroom-user/{chatroom-user}', 'ChatroomUserController@show');
+Route::post('chatroom-user', 'ChatroomUserController@store');
+Route::put('chatroom-user/{chatroom-user}', 'ChatroomUserController@update');
+Route::delete('chatroom-user/{chatroom-user}', 'ChatroomUserController@delete');

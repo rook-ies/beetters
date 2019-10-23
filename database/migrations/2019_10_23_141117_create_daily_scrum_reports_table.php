@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMessage extends Migration
+class CreateDailyScrumReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateMessage extends Migration
      */
     public function up()
     {
-        Schema::create('MESSAGE', function (Blueprint $table) {
+        Schema::create('DAILY_SCRUM_REPORT', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('idu');
             $table->unsignedBigInteger('idc');
-            $table->string('content');
-            $table->timestamps();
-            $table->foreign('idu')->references('id')->on('USERS')->change();
+            $table->unsignedBigInteger('idu');
+            $table->string('last_24_hour_activities');
+            $table->string('next_24_hour_activities');
             $table->foreign('idc')->references('id')->on('CHATROOM')->change();
+            $table->foreign('idu')->references('id')->on('USERS')->change();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +32,6 @@ class CreateMessage extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('MESSAGE');
+        Schema::dropIfExists('DAILY_SCRUM_REPORT');
     }
 }
