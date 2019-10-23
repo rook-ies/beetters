@@ -18,7 +18,7 @@ class CreateChatroomUser extends Migration
             $table->unsignedBigInteger('idu');
             $table->unsignedBigInteger('idc');
             $table->timestamps();
-            $table->foreign('idu')->references('id')->on('USER')->change();
+            $table->foreign('idu')->references('id')->on('USERS')->change();
             $table->foreign('idc')->references('id')->on('CHATROOM')->change();
         });
     }
