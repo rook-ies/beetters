@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAppProductivityTypeTable extends Migration
+class CreateOnlineStatusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateAppProductivityTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_productivity_type', function (Blueprint $table) {
+        Schema::create('online_status', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateAppProductivityTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_productivity_type');
+        Schema::dropIfExists('online_status');
     }
 }
