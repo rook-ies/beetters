@@ -10,12 +10,4 @@ class ChatroomUser extends Model
 
     protected $fillable = ['idu','idc'];
 
-    public function user()
-    {
-    	return $this->belongsTo('App\User');
-    }
-    public function chatroom()
-    {
-    	return $this->belongsTo('App\Chatroom');
-    }
 }

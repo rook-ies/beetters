@@ -50,6 +50,6 @@ class User extends Authenticatable
     }
     public function chatroomUser()
     {
-    	return $this->hasMany('App\ChatroomUser');
+    	return $this->belongsToMany('App\ChatroomUser');
     }
 }
