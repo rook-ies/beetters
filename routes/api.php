@@ -23,6 +23,42 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
 });
 
+Route::get('user-ctt-attribute', 'UserCTTAttributeController@index');
+Route::get('user-ctt-attribute/{userCTTAttribute}', 'UserCTTAttributeController@show');
+Route::post('user-ctt-attribute', 'UserCTTAttributeController@store');
+Route::put('user-ctt-attribute/{userCTTAttribute}', 'UserCTTAttributeController@update');
+Route::delete('user-ctt-attribute/{userCTTAttribute}', 'UserCTTAttributeController@delete');
+
+Route::get('online-status', 'OnlineStatusController@index');
+Route::get('online-status/{onlineStatus}', 'OnlineStatusController@show');
+Route::post('online-status', 'OnlineStatusController@store');
+Route::put('online-status/{onlineStatus}', 'OnlineStatusController@update');
+Route::delete('online-status/{onlineStatus}', 'OnlineStatusController@delete');
+
+Route::get('application-tracking-history', 'ApplicationTrackingHistoryController@index');
+Route::get('application-tracking-history/{applicationTrackingHistory}', 'ApplicationTrackingHistoryController@show');
+Route::post('application-tracking-history', 'ApplicationTrackingHistoryController@store');
+Route::put('application-tracking-history/{applicationTrackingHistory}', 'ApplicationTrackingHistoryController@update');
+Route::delete('application-tracking-history/{trackingHistory}', 'ApplicationTrackingHistoryController@delete');
+
+Route::get('tracking-history', 'TrackingHistoryController@index');
+Route::get('tracking-history/{trackingHistory}', 'TrackingHistoryController@show');
+Route::post('tracking-history', 'TrackingHistoryController@store');
+Route::put('tracking-history/{trackingHistory}', 'TrackingHistoryController@update');
+Route::delete('tracking-history/{trackingHistory}', 'TrackingHistoryController@delete');
+
+Route::get('application', 'ApplicationController@index');
+Route::get('application/{application}', 'ApplicationController@show');
+Route::post('application', 'ApplicationController@store');
+Route::put('application/{application}', 'ApplicationController@update');
+Route::delete('application/{application}', 'ApplicationController@delete');
+
+Route::get('obstacle', 'ObstacleController@index');
+Route::get('obstacle/{obstacle}', 'ObstacleController@show');
+Route::post('obstacle', 'ObstacleController@store');
+Route::put('obstacle/{obstacle}', 'ObstacleController@update');
+Route::delete('obstacle/{obstacle}', 'ObstacleController@delete');
+
 Route::get('daily-scrum-report', 'DailyScrumReportController@index');
 Route::get('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@show');
 Route::post('daily-scrum-report', 'DailyScrumReportController@store');
