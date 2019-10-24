@@ -9,4 +9,13 @@ class DailyScrumReport extends Model
     protected $table = 'daily_scrum_report';
 
     protected $fillable = ['idu','idc','last_24_hour_activities','next_24_hour_activities'];
+
+    public function user()
+    {
+    	return $this->belongsTo('App\User');
+    }
+    public function chatroom()
+    {
+    	return $this->belongsTo('App\Chatroom');
+    }
 }

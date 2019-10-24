@@ -6,8 +6,6 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Message;
-use App\Chatroom_user;
 class User extends Authenticatable
 {
     use Notifiable,HasApiTokens;
@@ -38,13 +36,20 @@ class User extends Authenticatable
     //protected $casts = [
     //    'email_verified_at' => 'datetime',
     //];
-    /*public function message()
+    public function message()
     {
-        return $this->hasMany('Message');
+    	return $this->hasMany('App\Message');
     }
-    public function chatroom_user()
+    public function dailyTrackingReport()
     {
-        return $this->hasMany('ChatroomUser');
-        // return $this->hasMany('ChatroomUser', 'idu');
-    }*/
+    	return $this->hasMany('App\DailyTrackingReport');
+    }
+    public function dailyScrumReport()
+    {
+    	return $this->hasMany('App\DailyScrumReport');
+    }
+    public function chatroomUser()
+    {
+    	return $this->hasMany('App\ChatroomUser');
+    }
 }
