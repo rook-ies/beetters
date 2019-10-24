@@ -52,3 +52,9 @@ Route::get('chatroom-user/{chatroom-user}', 'ChatroomUserController@show');
 Route::post('chatroom-user', 'ChatroomUserController@store');
 Route::put('chatroom-user/{chatroom-user}', 'ChatroomUserController@update');
 Route::delete('chatroom-user/{chatroom-user}', 'ChatroomUserController@delete');
+
+Route::get('daily-tracking-report', 'DailyTrackingReportController@index');
+Route::get('daily-tracking-report/{dailyTrackingReport}', 'DailyTrackingReportController@show');
+Route::post('daily-tracking-report', 'DailyTrackingReportController@store');
+Route::put('daily-tracking-report/{dailyTrackingReport}', 'DailyTrackingReportController@update');
+Route::delete('daily-tracking-report/{dailyTrackingReport}', 'DailyTrackingReportController@delete');

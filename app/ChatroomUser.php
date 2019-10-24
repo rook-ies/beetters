@@ -3,20 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-use App\ChatroomUser;
+
 class ChatroomUser extends Model
 {
     protected $table = 'chatroom_user';
 
     protected $fillable = ['idu','idc'];
 
-    /*public function user()
+    public function user()
     {
-        return $this->belongsTo('User');
+    	return $this->belongsTo('App\User');
     }
-    public function chatroom_user()
+    public function chatroom()
     {
-        return $this->belongsTo('ChatroomUser');
-    }*/
+    	return $this->belongsTo('App\Chatroom');
+    }
 }
