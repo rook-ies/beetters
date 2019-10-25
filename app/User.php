@@ -40,16 +40,27 @@ class User extends Authenticatable
     {
     	return $this->hasMany('App\Message');
     }
+
     public function dailyTrackingReport()
     {
     	return $this->hasMany('App\DailyTrackingReport');
     }
+
     public function dailyScrumReport()
     {
     	return $this->hasMany('App\DailyScrumReport');
     }
-    public function chatroomUser()
+
+    public function chatroom()
     {
-    	return $this->belongsToMany('App\ChatroomUser');
+    	return $this->belongsToMany('App\Chatroom');
+    }
+
+    public function trackingHistory(){
+      return $this->hasMany('App\TrackingHistory');
+    }
+
+    public function userCTTAttribute(){
+      return $this->hasOne('App\UserCTTAttribute');
     }
 }

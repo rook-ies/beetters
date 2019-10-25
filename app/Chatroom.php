@@ -9,9 +9,9 @@ class Chatroom extends Model
 
     protected $fillable = ['room_code','room_name','business_hour_start', 'business_hour_end'];
 
-    public function chatroomUser()
+    public function user()
     {
-    	return $this->belongsToMany('App\ChatroomUser');
+    	return $this->belongsTo('App\User');
     }
     public function message()
     {

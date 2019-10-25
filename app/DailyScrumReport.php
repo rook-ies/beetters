@@ -18,4 +18,8 @@ class DailyScrumReport extends Model
     {
     	return $this->belongsTo('App\Chatroom');
     }
+
+    public function obstacle(){
+      return $this->hasMany('App\Obstacle');
+    }
 }
