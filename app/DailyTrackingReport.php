@@ -9,7 +9,7 @@ class DailyTrackingReport extends Model
     protected $table = 'daily_tracking_report';
 
     protected $fillable = [
-        'idu',
+        'id_user',
         'productive_value',
         'netral_value',
         'not_productive_value'

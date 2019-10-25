@@ -7,7 +7,7 @@ class Message extends Model
 {
     protected $table = 'message';
 
-    protected $fillable = ['idc','idu','content'];
+    protected $fillable = ['id_chatroom','id_user','content'];
 
     public function user()
     {

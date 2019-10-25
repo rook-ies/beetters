@@ -15,7 +15,7 @@ class CreateChatroom extends Migration
     {
         Schema::create('CHATROOM', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('room_code');
+            $table->string('room_code')->unique();
             $table->string('room_name');
             $table->time('business_hour_start');
             $table->time('business_hour_end');

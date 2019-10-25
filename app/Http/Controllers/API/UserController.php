@@ -17,6 +17,7 @@ class UserController extends Controller
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('nApp')->accessToken;
+            //return Auth::guard('api')->id();
             return response()->json(['success' => $success], $this->successStatus);
         }
         else{
@@ -28,8 +29,9 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|max:200',
             'c_password' => 'required|same:password',
         ]);
 

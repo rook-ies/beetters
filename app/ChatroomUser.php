@@ -8,6 +8,6 @@ class ChatroomUser extends Model
 {
     protected $table = 'chatroom_user';
 
-    protected $fillable = ['idu','idc'];
+    protected $fillable = ['id_user','id_chatroom'];
 
 }
