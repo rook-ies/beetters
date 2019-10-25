@@ -11,7 +11,7 @@ class Chatroom extends Model
 
     public function chatroomUser()
     {
-    	return $this->hasMany('App\ChatroomUser');
+    	return $this->belongsToMany('App\ChatroomUser');
     }
     public function message()
     {

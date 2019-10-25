@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use Validator;
 use App\DailyTrackingReport;
 class DailyTrackingReportController extends Controller
 {
@@ -18,13 +21,38 @@ class DailyTrackingReportController extends Controller
 
     public function store(Request $request)
     {
-        $dailyTrackingReport = DailyTrackingReport::create($request->all());
+        //$dailyTrackingReport = DailyTrackingReport::create($request->all());
+        $validator = Validator::make($request->all(), [
+            'productive_value' => 'required',
+            'netral_value' => 'required',
+            'not_productive_value' => 'required',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
+        $dailyTrackingReport = new DailyTrackingReport;
+        $dailyTrackingReport->id_user = Auth::guard('api')->id();
+        $dailyTrackingReport->productive_value = $request->productive_value;
+        $dailyTrackingReport->netral_value = $request->netral_value;
+        $dailyTrackingReport->not_productive_value = $request->not_productive_value;
+        $dailyTrackingReport->save();
         return response()->json($dailyTrackingReport, 201);
     }
 
     public function update(Request $request, DailyTrackingReport $dailyTrackingReport)
     {
+        $validator = Validator::make($request->all(), [
+            'productive_value' => 'required',
+            'netral_value' => 'required',
+            'not_productive_value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
         $dailyTrackingReport->update($request->all());
 
         return response()->json($dailyTrackingReport, 200);

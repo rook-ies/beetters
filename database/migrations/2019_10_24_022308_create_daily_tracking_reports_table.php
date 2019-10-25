@@ -15,11 +15,11 @@ class CreateDailyTrackingReportsTable extends Migration
     {
         Schema::create('daily_tracking_report', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('idu');
+            $table->unsignedBigInteger('id_user');
             $table->double('productive_value', 6, 2);
             $table->double('netral_value', 6, 2);
             $table->double('not_productive_value', 6, 2);
-            $table->foreign('idu')->references('id')->on('USERS')->change();
+            $table->foreign('id_user')->references('id')->on('USERS')->change();
             $table->timestamps();
         });
     }
