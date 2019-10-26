@@ -14,7 +14,7 @@ class UserCTTAttribute extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function userCTTAttribute(){
-      return $this->hasOne('App\OnlineStatus');
+    public function OnlineStatus(){
+      return $this->belongsTo('App\OnlineStatus');
     }
 }

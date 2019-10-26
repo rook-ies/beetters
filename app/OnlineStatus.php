@@ -11,6 +11,6 @@ class OnlineStatus extends Model
     protected $fillable=['status'];
 
     public function userCTTAttribute(){
-      return $this->belongsToMany('App\UserCTTAttribute');
+      return $this->hasMany('App\UserCTTAttribute');
     }
 }
