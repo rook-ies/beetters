@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\DailyScrumReport;
+
 class DailyScrumReportController extends Controller
 {
     public function index()

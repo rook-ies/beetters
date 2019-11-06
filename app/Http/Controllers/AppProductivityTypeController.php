@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\AppProductivityType;
+use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class AppProductivityTypeController extends Controller
 {
@@ -20,7 +22,14 @@ class AppProductivityTypeController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
         $AppProductivity = AppProductivityType::create($request->all());
 
         return response()->json($AppProductivity,201);
@@ -33,6 +42,14 @@ class AppProductivityTypeController extends Controller
 
     public function update(Request $request, AppProductivityType $AppProductivity)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
         $AppProductivity->update($request->all());
 
         return response()->json($AppProductivity,200);

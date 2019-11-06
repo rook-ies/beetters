@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\OnlineStatus;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class OnlineStatusController extends Controller
 {
@@ -14,6 +15,14 @@ class OnlineStatusController extends Controller
 
   public function store(Request $request)
   {
+      $validator = Validator::make($request->all(), [
+          'status' => 'required',
+      ]);
+
+      if ($validator->fails()) {
+          return response()->json(['error'=>$validator->errors()], 401);
+      }
+
       $onlineStatus = OnlineStatus::create($request->all());
 
       return response()->json($onlineStatus,201);
@@ -26,6 +35,14 @@ class OnlineStatusController extends Controller
 
   public function update(Request $request, OnlineStatus $onlineStatus)
   {
+    $validator = Validator::make($request->all(), [
+        'status' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['error'=>$validator->errors()], 401);
+    }
+    
       $onlineStatus->update($request->all());
 
       return response()->json($onlineStatus,200);
