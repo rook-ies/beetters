@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChatroomUser extends Migration
+class CreateTeam extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateChatroomUser extends Migration
      */
     public function up()
     {
-        Schema::create('CHATROOM_USER', function (Blueprint $table) {
+        Schema::create('TEAM', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_chatroom');
+            $table->string('room_code')->unique();
+            $table->string('room_name');
+            $table->time('business_hour_start');
+            $table->time('business_hour_end');
             $table->timestamps();
-            $table->foreign('id_user')->references('id')->on('USERS')->change();
-            $table->foreign('id_chatroom')->references('id')->on('CHATROOM')->change();
         });
     }
 
@@ -30,6 +30,6 @@ class CreateChatroomUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('CHATROOM_USER');
+        Schema::dropIfExists('TEAM');
     }
 }

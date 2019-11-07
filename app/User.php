@@ -36,20 +36,29 @@ class User extends Authenticatable
     //protected $casts = [
     //    'email_verified_at' => 'datetime',
     //];
-    public function message()
-    {
-    	return $this->hasMany('App\Message');
-    }
+
     public function dailyTrackingReport()
     {
     	return $this->hasMany('App\DailyTrackingReport');
     }
+
     public function dailyScrumReport()
     {
     	return $this->hasMany('App\DailyScrumReport');
     }
-    public function chatroomUser()
+
+    public function poke()
     {
-    	return $this->belongsToMany('App\ChatroomUser');
+    	return $this->hasMany('App\Poke');
     }
+
+    public function userTeam()
+    {
+    	return $this->hasMany('App\UserTeam');
+    }
+
+    public function trackingHistory(){
+      return $this->hasMany('App\TrackingHistory');
+    }
+
 }

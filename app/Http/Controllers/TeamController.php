@@ -5,24 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use App\Chatroom;
-class ChatroomController extends Controller
+use Illuminate\Support\Str;
+use App\Team;
+class TeamController extends Controller
 {
     public function index()
     {
-        return Chatroom::all();
+        return Team::all();
     }
 
-    public function show(Chatroom $chatroom)
+    public function show(Team $team)
     {
-        return $chatroom;
+        return $team;
     }
 
     public function store(Request $request)
     {
-        //$chatroom = Chatroom::create($request->all());
+        //$team = Team::create($request->all());
         $validator = Validator::make($request->all(), [
-            'room_code' => 'required|unique:chatroom,room_code',
+            //'room_code' => 'required|unique:team,room_code',
             'room_name' => 'required',
             'business_hour_start' => 'required',
             'business_hour_end' => 'required',
@@ -32,19 +33,19 @@ class ChatroomController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);
         }
 
-        $chatroom = new Chatroom;
-        $chatroom->room_code = $request->room_code;
-        $chatroom->room_name = $request->room_name;
-        $chatroom->business_hour_start = $request->business_hour_start;
-        $chatroom->business_hour_end = $request->business_hour_end;
-        $chatroom->save();
-        return response()->json($chatroom, 201);
+        $team = new Team;
+        $team->room_code = Str::random(10);
+        $team->room_name = $request->room_name;
+        $team->business_hour_start = $request->business_hour_start;
+        $team->business_hour_end = $request->business_hour_end;
+        $team->save();
+        return response()->json($team, 201);
     }
 
-    public function update(Request $request, Chatroom $chatroom)
+    public function update(Request $request, Team $team)
     {
         $validator = Validator::make($request->all(), [
-            'room_code' => 'required|unique:chatroom,room_code',
+            'room_code' => 'unique:team,room_code',
             'room_name' => 'required',
             'business_hour_start' => 'required',
             'business_hour_end' => 'required',
@@ -53,15 +54,15 @@ class ChatroomController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
+        $team->room_code = Str::random(10);
+        $team->update($request->all());
 
-        $chatroom->update($request->all());
-
-        return response()->json($chatroom, 200);
+        return response()->json($team, 200);
     }
 
-    public function delete(Chatroom $chatroom)
+    public function delete(Team $team)
     {
-        $chatroom->delete();
+        $team->delete();
 
         return response()->json(null, 204);
     }

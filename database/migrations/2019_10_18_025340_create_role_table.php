@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOnlineStatusTable extends Migration
+class CreateRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateOnlineStatusTable extends Migration
      */
     public function up()
     {
-        Schema::create('online_status', function (Blueprint $table) {
+        Schema::create('role', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('status');
+            $table->string('role_type');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateOnlineStatusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('online_status');
+        Schema::dropIfExists('role');
     }
 }

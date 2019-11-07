@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\DailyScrumReport;
+
 class DailyScrumReportController extends Controller
 {
     public function index()
     {
-        return DailyScrumReport::all();
+        return response()->json(['success'=>'true','data'=>DailyScrumReport::all()],200);
+        //return DailyScrumReport::all();
     }
 
     public function show(DailyScrumReport $dailyScrumReport)
     {
-        return $dailyScrumReport;
+        return response()->json(['success'=>'true','data'=>$dailyScrumReport],200);
     }
 
     public function store(Request $request)
@@ -38,7 +40,8 @@ class DailyScrumReportController extends Controller
         $dailyScrumReport->last_24_hour_activities = $request->last_24_hour_activities;
         $dailyScrumReport->next_24_hour_activities = $request->next_24_hour_activities;
         $dailyScrumReport->save();
-        return response()->json($dailyScrumReport, 201);
+
+        return response()->json(['success'=>'true','data'=>$dailyScrumReport],201);
     }
 
     public function update(Request $request, DailyScrumReport $dailyScrumReport)
@@ -55,7 +58,7 @@ class DailyScrumReportController extends Controller
 
         $dailyScrumReport->update($request->all());
 
-        return response()->json($dailyScrumReport, 200);
+        return response()->json(['success'=>'true','data'=>$dailyScrumReport],200);
     }
 
     public function delete(DailyScrumReport $dailyScrumReport)
