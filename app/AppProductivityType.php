@@ -12,6 +12,6 @@ class AppProductivityType extends Model
     protected $fillable=['name'];
 
     public function application(){
-      return $this->belongsToMany('App\Application');
+      return $this->hasMany('App\Application');
     }
 }

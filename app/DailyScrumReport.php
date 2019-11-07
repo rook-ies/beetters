@@ -8,15 +8,15 @@ class DailyScrumReport extends Model
 {
     protected $table = 'daily_scrum_report';
 
-    protected $fillable = ['id_user','id_chatroom','last_24_hour_activities','next_24_hour_activities'];
+    protected $fillable = ['id_user','id_team','last_24_hour_activities','next_24_hour_activities'];
 
     public function user()
     {
     	return $this->belongsTo('App\User');
     }
-    public function chatroom()
+    public function team()
     {
-    	return $this->belongsTo('App\Chatroom');
+    	return $this->belongsTo('App\Team');
     }
 
     public function obstacle(){
