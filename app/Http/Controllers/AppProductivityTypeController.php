@@ -17,7 +17,6 @@ class AppProductivityTypeController extends Controller
     public function index()
     {
         return response()->json(['success'=>'true','data'=>AppProductivityType::all()],200);
-        //return AppProductivityType::all();
     }
 
     public function store(Request $request)

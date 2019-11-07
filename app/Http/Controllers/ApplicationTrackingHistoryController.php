@@ -12,7 +12,6 @@ class ApplicationTrackingHistoryController extends Controller
   public function index()
   {
       return response()->json(['success'=>'true','data'=>ApplicationTrackingHistory::all()],200);
-      //return ApplicationTrackingHistory::all();
   }
 
   public function store(Request $request)

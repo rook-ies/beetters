@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('team', 'TeamController@store');
     Route::put('team/{team}', 'TeamController@update');
     Route::delete('team/{team}', 'TeamController@delete');
+    Route::post('team/join', 'TeamController@join');
 
     Route::get('user-team', 'UserTeamController@index');
     Route::get('user-team/{user-team}', 'UserTeamController@show');

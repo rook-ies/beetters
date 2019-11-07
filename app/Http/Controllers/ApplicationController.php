@@ -17,7 +17,6 @@ class ApplicationController extends Controller
     public function index()
     {
         return response()->json(['success'=>'true','data'=>Application::all()], 200);
-        //return Application::all();
     }
 
     public function store(Request $request)
@@ -40,7 +39,7 @@ class ApplicationController extends Controller
 
     public function show(Application $application)
     {
-        return response()->json(['success'=>'true','data'=>$application],201);
+        return response()->json(['success'=>'true','data'=>$application],200);
     }
 
     public function update(Request $request, Application $application)
@@ -57,7 +56,7 @@ class ApplicationController extends Controller
 
         $application->update($request->all());
 
-        return response()->json(['success'=>'true','data'=>$application],201);
+        return response()->json(['success'=>'true','data'=>$application],200);
     }
 
     public function delete(Application $application)

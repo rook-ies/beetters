@@ -13,7 +13,6 @@ class DailyScrumReportController extends Controller
     public function index()
     {
         return response()->json(['success'=>'true','data'=>DailyScrumReport::all()],200);
-        //return DailyScrumReport::all();
     }
 
     public function show(DailyScrumReport $dailyScrumReport)
@@ -23,7 +22,6 @@ class DailyScrumReportController extends Controller
 
     public function store(Request $request)
     {
-        //$dailyScrumReport = DailyScrumReport::create($request->all());
         $validator = Validator::make($request->all(), [
             'id_chatroom' => 'required',
             'last_24_hour_activities' => 'required',

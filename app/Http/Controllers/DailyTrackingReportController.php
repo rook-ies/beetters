@@ -12,7 +12,6 @@ class DailyTrackingReportController extends Controller
     public function index()
     {
         return response()->json(['success'=>'true','data'=>DailyTrackingReport::all()],200);
-        //return DailyTrackingReport::all();
     }
 
     public function show(DailyTrackingReport $dailyTrackingReport)
@@ -22,7 +21,6 @@ class DailyTrackingReportController extends Controller
 
     public function store(Request $request)
     {
-        //$dailyTrackingReport = DailyTrackingReport::create($request->all());
         $validator = Validator::make($request->all(), [
             'productive_value' => 'required',
             'netral_value' => 'required',

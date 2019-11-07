@@ -12,7 +12,7 @@ class TrackingHistoryController extends Controller
 
     public function index()
     {
-        return TrackingHistory::all();
+        return response()->json(['success'=>'true','data'=>TrackingHistory::all()],200);
     }
 
     public function store(Request $request)
@@ -34,12 +34,12 @@ class TrackingHistoryController extends Controller
       $trackingHistory->duration = $request->duration;
       $trackingHistory->save();
 
-        return response()->json($trackingHistory,201);
+      return response()->json(['success'=>'true','data'=>$trackingHistory],201);
     }
 
     public function show(TrackingHistory $trackingHistory)
     {
-        return $trackingHistory;
+        return response()->json(['success'=>'true','data'=>$trackingHistory],201);
     }
 
     public function update(Request $request,TrackingHistory $trackingHistory)
@@ -55,8 +55,7 @@ class TrackingHistoryController extends Controller
         }
 
         $trackingHistory->update($request->all());
-
-        return response()->json($trackingHistory,200);
+        return response()->json(['success'=>'true','data'=>$trackingHistory],201);
     }
 
     public function delete(TrackingHistory $trackingHistory)
