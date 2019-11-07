@@ -47,10 +47,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('application/{application}', 'ApplicationController@delete');
 
     Route::get('application-role', 'ApplicationRoleController@index');
-    Route::get('application-role/{application-role}', 'ApplicationRoleController@show');
+    Route::get('application-role/{applicationRole}', 'ApplicationRoleController@show');
     Route::post('application-role', 'ApplicationRoleController@store');
-    Route::put('application-role/{application-role}', 'ApplicationRoleController@update');
-    Route::delete('application-role/{application-role}', 'ApplicationRoleController@delete');
+    Route::put('application-role/{applicationRole}', 'ApplicationRoleController@update');
+    Route::delete('application-role/{ApplicationRole}', 'ApplicationRoleController@delete');
 
     Route::get('obstacle', 'ObstacleController@index');
     Route::get('obstacle/{obstacle}', 'ObstacleController@show');
@@ -59,10 +59,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('obstacle/{obstacle}', 'ObstacleController@delete');
 
     Route::get('daily-scrum-report', 'DailyScrumReportController@index');
-    Route::get('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@show');
+    Route::get('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@show');
     Route::post('daily-scrum-report', 'DailyScrumReportController@store');
-    Route::put('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@update');
-    Route::delete('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@delete');
+    Route::put('daily-scrum-report/{dailyScrumReport-report}', 'DailyScrumReportController@update');
+    Route::delete('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@delete');
 
     Route::get('app-productivity-type', 'AppProductivityTypeController@index');
     Route::get('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@show');
@@ -75,12 +75,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('team', 'TeamController@store');
     Route::put('team/{team}', 'TeamController@update');
     Route::delete('team/{team}', 'TeamController@delete');
+    Route::post('team/join', 'TeamController@join');
 
     Route::get('user-team', 'UserTeamController@index');
-    Route::get('user-team/{user-team}', 'UserTeamController@show');
+    Route::get('user-team/{userTeam}', 'UserTeamController@show');
     Route::post('user-team', 'UserTeamController@store');
-    Route::put('user-team/{user-team}', 'UserTeamController@update');
-    Route::delete('user-team/{user-team}', 'UserTeamController@delete');
+    Route::put('user-team/{userTeam}', 'UserTeamController@update');
+    Route::delete('user-team/{userTeam}', 'UserTeamController@delete');
 
     Route::get('poke', 'PokeController@index');
     Route::get('poke/{poke}', 'PokeController@show');

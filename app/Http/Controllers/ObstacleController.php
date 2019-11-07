@@ -13,7 +13,6 @@ class ObstacleController extends Controller
     public function index()
     {
        return response()->json(['success'=>'true','data'=>Obstacle::all()],200);
-       //return Obstacle::all();
     }
 
     public function store(Request $request)
@@ -27,9 +26,9 @@ class ObstacleController extends Controller
           return response()->json(['error'=>$validator->errors()], 401);
       }
 
-        $obstacle = Obstacle::create($request->all());
+      $obstacle = Obstacle::create($request->all());
 
-        return response()->json(['success'=>'true','data'=>$obstacle],201);
+      return response()->json(['success'=>'true','data'=>$obstacle],201);
     }
 
     public function show(Obstacle $obstacle)
@@ -57,6 +56,6 @@ class ObstacleController extends Controller
     {
         $obstacle->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
     }
 }
