@@ -29,13 +29,6 @@ class ApplicationRoleController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);
         }
         $applicationRole = ApplicationRole::create($request->all());
-<<<<<<< HEAD
-=======
-          // $applicationRole = new ApplicationRole;
-          // $applicationRole->id_application = $request->id_application;
-          // $applicationRole->id_role = $request->id_role;
-          // $applicationRole->save();
->>>>>>> f65cbc743d54a3f25b2f861cf52e5df382e5ca0c
         return response()->json(['success'=>'true','data'=>$applicationRole],201);
     }
 
@@ -57,11 +50,7 @@ class ApplicationRoleController extends Controller
     public function delete(ApplicationRole $applicationRole)
     {
         $applicationRole->delete();
-<<<<<<< HEAD
 
         return response()->json(['success'=>'true','message'=>'successfully delete'],200);
-=======
-        return response()->json(null, 204);
->>>>>>> f65cbc743d54a3f25b2f861cf52e5df382e5ca0c
     }
 }
