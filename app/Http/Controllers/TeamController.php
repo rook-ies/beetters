@@ -97,6 +97,10 @@ class TeamController extends Controller
         $teamUser->id_role = $request->role;
         $teamUser->save();
 
+<<<<<<< HEAD
         return response()->json(['message'=>"you have successfully joined a team"], 200);
+=======
+        return response()->json(['message'=>"you have successfully joined"], 401);
+>>>>>>> f65cbc743d54a3f25b2f861cf52e5df382e5ca0c
     }
 }
