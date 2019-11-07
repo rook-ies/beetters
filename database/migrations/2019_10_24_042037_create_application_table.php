@@ -15,12 +15,12 @@ class CreateApplicationTable extends Migration
     {
         Schema::create('application', function (Blueprint $table) {
           $table->bigIncrements('id');
-          $table->unsignedBigInteger('idapt');
+          $table->unsignedBigInteger('id_app_productivity_type');
           $table->string('name');
           $table->string('application_file_name');
           $table->binary('application_icon');
           $table->timestamps();
-          $table->foreign('idapt')->references('id')->on('app_productivity_type')->change();
+          $table->foreign('id_app_productivity_type')->references('id')->on('app_productivity_type')->change();
 
         });
     }

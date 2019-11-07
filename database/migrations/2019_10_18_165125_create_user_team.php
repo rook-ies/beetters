@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMessage extends Migration
+class CreateUserTeam extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateMessage extends Migration
      */
     public function up()
     {
-        Schema::create('MESSAGE', function (Blueprint $table) {
+        Schema::create('USER_TEAM', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_chatroom');
-            $table->string('content');
+            $table->unsignedBigInteger('id_team');
+            $table->unsignedBigInteger('id_role');
             $table->timestamps();
             $table->foreign('id_user')->references('id')->on('USERS')->change();
-            $table->foreign('id_chatroom')->references('id')->on('CHATROOM')->change();
+            $table->foreign('id_team')->references('id')->on('TEAM')->change();
+            $table->foreign('id_role')->references('id')->on('ROLE')->change();
         });
     }
 
@@ -31,6 +32,6 @@ class CreateMessage extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('MESSAGE');
+        Schema::dropIfExists('USER_TEAM');
     }
 }

@@ -15,11 +15,11 @@ class CreateDailyScrumReportsTable extends Migration
     {
         Schema::create('DAILY_SCRUM_REPORT', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_chatroom');
+            $table->unsignedBigInteger('id_team');
             $table->unsignedBigInteger('id_user');
             $table->string('last_24_hour_activities');
             $table->string('next_24_hour_activities');
-            $table->foreign('id_chatroom')->references('id')->on('CHATROOM')->change();
+            $table->foreign('id_team')->references('id')->on('TEAM')->change();
             $table->foreign('id_user')->references('id')->on('USERS')->change();
             $table->timestamps();
         });

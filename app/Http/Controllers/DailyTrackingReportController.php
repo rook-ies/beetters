@@ -11,12 +11,13 @@ class DailyTrackingReportController extends Controller
 {
     public function index()
     {
-        return DailyTrackingReport::all();
+        return response()->json(['success'=>'true','data'=>DailyTrackingReport::all()],200);
+        //return DailyTrackingReport::all();
     }
 
     public function show(DailyTrackingReport $dailyTrackingReport)
     {
-        return $dailyTrackingReport;
+        return response()->json(['success'=>'true','data'=>$dailyTrackingReport],200);
     }
 
     public function store(Request $request)
@@ -38,7 +39,8 @@ class DailyTrackingReportController extends Controller
         $dailyTrackingReport->netral_value = $request->netral_value;
         $dailyTrackingReport->not_productive_value = $request->not_productive_value;
         $dailyTrackingReport->save();
-        return response()->json($dailyTrackingReport, 201);
+
+        return response()->json(['success'=>'true','data'=>$dailyTrackingReport],201);
     }
 
     public function update(Request $request, DailyTrackingReport $dailyTrackingReport)
@@ -55,7 +57,7 @@ class DailyTrackingReportController extends Controller
 
         $dailyTrackingReport->update($request->all());
 
-        return response()->json($dailyTrackingReport, 200);
+        return response()->json(['success'=>'true','data'=>$dailyTrackingReport],200);
     }
 
     public function delete(DailyTrackingReport $dailyTrackingReport)

@@ -28,12 +28,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('user-ctt-attribute/{userCTTAttribute}', 'UserCTTAttributeController@update');
     Route::delete('user-ctt-attribute/{userCTTAttribute}', 'UserCTTAttributeController@delete');
 
-    Route::get('online-status', 'OnlineStatusController@index');
-    Route::get('online-status/{onlineStatus}', 'OnlineStatusController@show');
-    Route::post('online-status', 'OnlineStatusController@store');
-    Route::put('online-status/{onlineStatus}', 'OnlineStatusController@update');
-    Route::delete('online-status/{onlineStatus}', 'OnlineStatusController@delete');
-
     Route::get('application-tracking-history', 'ApplicationTrackingHistoryController@index');
     Route::get('application-tracking-history/{applicationTrackingHistory}', 'ApplicationTrackingHistoryController@show');
     Route::post('application-tracking-history', 'ApplicationTrackingHistoryController@store');
@@ -52,6 +46,12 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('application/{application}', 'ApplicationController@update');
     Route::delete('application/{application}', 'ApplicationController@delete');
 
+    Route::get('application-role', 'ApplicationRoleController@index');
+    Route::get('application-role/{application-role}', 'ApplicationRoleController@show');
+    Route::post('application-role', 'ApplicationRoleController@store');
+    Route::put('application-role/{application-role}', 'ApplicationRoleController@update');
+    Route::delete('application-role/{application-role}', 'ApplicationRoleController@delete');
+
     Route::get('obstacle', 'ObstacleController@index');
     Route::get('obstacle/{obstacle}', 'ObstacleController@show');
     Route::post('obstacle', 'ObstacleController@store');
@@ -64,29 +64,35 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@update');
     Route::delete('daily-scrum-report/{daily-scrum-report}', 'DailyScrumReportController@delete');
 
-    Route::get('message', 'MessageController@index');
-    Route::get('message/{message}', 'MessageController@show');
-    Route::post('message', 'MessageController@store');
-    Route::put('message/{message}', 'MessageController@update');
-    Route::delete('message/{message}', 'MessageController@delete');
-
     Route::get('app-productivity-type', 'AppProductivityTypeController@index');
     Route::get('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@show');
     Route::post('app-productivity-type', 'AppProductivityTypeController@store');
     Route::put('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@update');
     Route::delete('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@destroy');
 
-    Route::get('chatroom', 'ChatroomController@index');
-    Route::get('chatroom/{chatroom}', 'ChatroomController@show');
-    Route::post('chatroom', 'ChatroomController@store');
-    Route::put('chatroom/{chatroom}', 'ChatroomController@update');
-    Route::delete('chatroom/{chatroom}', 'ChatroomController@delete');
+    Route::get('team', 'TeamController@index');
+    Route::get('team/{team}', 'TeamController@show');
+    Route::post('team', 'TeamController@store');
+    Route::put('team/{team}', 'TeamController@update');
+    Route::delete('team/{team}', 'TeamController@delete');
 
-    Route::get('chatroom-user', 'ChatroomUserController@index');
-    Route::get('chatroom-user/{chatroom-user}', 'ChatroomUserController@show');
-    Route::post('chatroom-user', 'ChatroomUserController@store');
-    Route::put('chatroom-user/{chatroom-user}', 'ChatroomUserController@update');
-    Route::delete('chatroom-user/{chatroom-user}', 'ChatroomUserController@delete');
+    Route::get('user-team', 'UserTeamController@index');
+    Route::get('user-team/{user-team}', 'UserTeamController@show');
+    Route::post('user-team', 'UserTeamController@store');
+    Route::put('user-team/{user-team}', 'UserTeamController@update');
+    Route::delete('user-team/{user-team}', 'UserTeamController@delete');
+
+    Route::get('poke', 'PokeController@index');
+    Route::get('poke/{poke}', 'PokeController@show');
+    Route::post('poke', 'PokeController@store');
+    Route::put('poke/{poke}', 'PokeController@update');
+    Route::delete('poke/{poke}', 'PokeController@delete');
+
+    Route::get('role', 'RoleController@index');
+    Route::get('role/{role}', 'RoleController@show');
+    Route::post('role', 'RoleController@store');
+    Route::put('role/{role}', 'RoleController@update');
+    Route::delete('role/{role}', 'RoleController@delete');
 
     Route::get('daily-tracking-report', 'DailyTrackingReportController@index');
     Route::get('daily-tracking-report/{dailyTrackingReport}', 'DailyTrackingReportController@show');
