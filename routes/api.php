@@ -20,7 +20,9 @@ Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::post('details', 'API\UserController@details');
+
+    Route::post('logout', 'API\UserController@logout');
+    Route::get('user', 'API\UserController@user');
 
     Route::get('user-ctt-attribute', 'UserCTTAttributeController@index');
     Route::get('user-ctt-attribute/{userCTTAttribute}', 'UserCTTAttributeController@show');

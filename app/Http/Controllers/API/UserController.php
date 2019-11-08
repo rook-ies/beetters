@@ -16,9 +16,10 @@ class UserController extends Controller
     public function login(){
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
-            $success['token'] =  $user->createToken('nApp')->accessToken;
+            $token =  $user->createToken('nApp')->accessToken;
             //return Auth::guard('api')->id();
-            return response()->json(['success' => $success], $this->successStatus);
+            //return response()->json(['success' => $success], $this->successStatus);
+            return response()->json(['token'=>$token]);
         }
         else{
             return response()->json(['error'=>'Unauthorised'], 401);
@@ -48,9 +49,10 @@ class UserController extends Controller
         return response()->json(['success'=>$success], $this->successStatus);
     }
 
-    public function details()
+    public function user()
     {
         $user = Auth::user();
-        return response()->json(['success' => $user], $this->successStatus);
+        return response()->json(['user' => $user]);
     }
+
 }
