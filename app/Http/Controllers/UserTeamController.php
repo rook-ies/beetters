@@ -11,11 +11,12 @@ class UserTeamController extends Controller
     public function index()
     {
         return UserTeam::all();
+        return response()->json(['success'=>'true','data'=>UserTeam::all()],200);
     }
 
     public function show(UserTeam $userTeam)
     {
-        return $userTeam;
+        return response()->json(['success'=>'true','data'=>$userTeam],200);
     }
 
     public function store(Request $request)
@@ -35,7 +36,8 @@ class UserTeamController extends Controller
         $userTeam->id_team = $request->id_team;
         $userTeam->id_role = $request->id_role;
         $userTeam->save();
-        return response()->json($userTeam, 201);
+
+        return response()->json(['success'=>'true','data'=>$userTeam],201);
     }
 
     public function update(Request $request, UserTeam $userTeam)
@@ -50,13 +52,13 @@ class UserTeamController extends Controller
         }
         $userTeam->update($request->all());
 
-        return response()->json($userTeam, 200);
+        return response()->json(['success'=>'true','data'=>$userTeam],200);
     }
 
     public function delete(UserTeam $userTeam)
     {
         $userTeam->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
     }
 }

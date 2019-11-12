@@ -12,7 +12,6 @@ class ApplicationTrackingHistoryController extends Controller
   public function index()
   {
       return response()->json(['success'=>'true','data'=>ApplicationTrackingHistory::all()],200);
-      //return ApplicationTrackingHistory::all();
   }
 
   public function store(Request $request)
@@ -56,6 +55,6 @@ class ApplicationTrackingHistoryController extends Controller
   {
       $applicationTrackingHistory->delete();
 
-      return response()->json(null,204);
+      return response()->json(['success'=>'true','message'=>'successfully delete'],200);
   }
 }

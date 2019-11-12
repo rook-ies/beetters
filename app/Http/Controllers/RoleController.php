@@ -9,17 +9,17 @@ class RoleController extends Controller
 {
   public function index()
   {
-      return Role::all();
+      return response()->json(['success'=>'true','data'=>Role::all()],201);
   }
 
   public function show(Role $role)
   {
-      return $role;
+      return response()->json(['success'=>'true','data'=>$role],201);
   }
 
   public function store(Request $request)
   {
-      //$role = Role::create($request->all());
+      //
       $validator = Validator::make($request->all(), [
           'role_type' => 'required',
       ]);
@@ -28,10 +28,8 @@ class RoleController extends Controller
           return response()->json(['error'=>$validator->errors()], 401);
       }
 
-      $role = new Role;
-      $role->role_type = $request->role_type;
-      $role->save();
-      return response()->json($role, 201);
+      $role = Role::create($request->all());
+      return response()->json(['success'=>'true','data'=>$role],201);
   }
 
   public function update(Request $request, Role $role)
@@ -44,14 +42,13 @@ class RoleController extends Controller
           return response()->json(['error'=>$validator->errors()], 401);
       }
       $role->update($request->all());
-
-      return response()->json($role, 200);
+      return response()->json(['success'=>'true','data'=>$role],200);
   }
 
   public function delete(Role $role)
   {
       $role->delete();
 
-      return response()->json(null, 204);
+      return response()->json(['success'=>'true','message'=>'successfully delete'],200);
   }
 }

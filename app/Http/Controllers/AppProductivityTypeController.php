@@ -17,7 +17,6 @@ class AppProductivityTypeController extends Controller
     public function index()
     {
         return response()->json(['success'=>'true','data'=>AppProductivityType::all()],200);
-        //return AppProductivityType::all();
     }
 
     public function store(Request $request)
@@ -59,6 +58,6 @@ class AppProductivityTypeController extends Controller
     {
         $AppProductivity->delete();
 
-        return response()->json(null,204);
+        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
     }
 }
