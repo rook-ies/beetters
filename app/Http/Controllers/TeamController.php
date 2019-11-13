@@ -91,6 +91,12 @@ class TeamController extends Controller
         if($room==null){
             return response()->json(['error'=>'room not found'], 404);
         }
+        $ada = UserTeam::where('id_user',Auth::guard('api')->id())
+                        ->where('id_team', $room->id)->count();
+
+        if($ada){
+            return response()->json(['error'=>'You already joined this team'], 400);
+        }
 
         $teamUser = new UserTeam;
         $teamUser->id_team = $room->id;
