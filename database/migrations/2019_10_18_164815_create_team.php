@@ -13,7 +13,7 @@ class CreateTeam extends Migration
      */
     public function up()
     {
-        Schema::create('TEAM', function (Blueprint $table) {
+        Schema::create('team', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('room_code')->unique();
             $table->string('room_name');
@@ -30,6 +30,6 @@ class CreateTeam extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('TEAM');
+        Schema::dropIfExists('team');
     }
 }
