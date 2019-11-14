@@ -54,6 +54,14 @@ class TeamController extends Controller
       return response()->json(['success'=>'true','data'=>$teamArray],200);
     }
 
+    public function test(){
+     //$userTeams = UserTeam::where('id_user',Auth::guard('api')->id())->get(['id_team']);
+      echo 'test';
+
+
+      //return response()->json(['success'=>'true','data'=>$teamArray],200);
+    }
+
     public function update(Request $request, Team $team)
     {
         $validator = Validator::make($request->all(), [
