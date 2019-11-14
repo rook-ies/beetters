@@ -4111,6 +4111,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-diactoros.git",
+                "reference": "66eded992a75bfe75a829005a2884aae5ca86daa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/66eded992a75bfe75a829005a2884aae5ca86daa",
+                "reference": "66eded992a75bfe75a829005a2884aae5ca86daa",
             "version": "2.2.1",
             "source": {
                 "type": "git",
