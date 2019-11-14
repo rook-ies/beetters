@@ -17,7 +17,7 @@ class CreateObstacleTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_daily_scrum_report');
             $table->string('content');
-            $table->foreign('id_daily_scrum_report')->references('id')->on('DAILY_SCRUM_REPORT')->change();
+            $table->foreign('id_daily_scrum_report')->references('id')->on('daily_scrum_report')->change();
             $table->timestamps();
         });
     }
