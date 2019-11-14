@@ -12,18 +12,19 @@ class TeamController extends Controller
 {
     public function index()
     {
-        return response()->json(['success'=>'true','data'=>Team::all()],200);
+        return Team::all();
     }
 
     public function show(Team $team)
     {
-        return response()->json(['success'=>'true','data'=>$team],200);
+        return $team;
     }
 
     public function store(Request $request)
     {
+        //$team = Team::create($request->all());
         $validator = Validator::make($request->all(), [
-            'room_code' => 'required|unique:team,room_code',
+            //'room_code' => 'required|unique:team,room_code',
             'room_name' => 'required',
             'business_hour_start' => 'required',
             'business_hour_end' => 'required',
@@ -34,28 +35,29 @@ class TeamController extends Controller
         }
 
         $team = new Team;
-        //$team->room_code = Str::random(10);
-        $team->room_code = $request->room_code;
+        $team->room_code = Str::random(10);
         $team->room_name = $request->room_name;
         $team->business_hour_start = $request->business_hour_start;
         $team->business_hour_end = $request->business_hour_end;
         $team->save();
+        return response()->json($team, 201);
+    }
 
-        //setalah buat langsung join
-
-        $teamUser = new UserTeam;
-        $teamUser->id_team = $team->id;
-        $teamUser->id_user = Auth::guard('api')->id();
-        $teamUser->id_role = 1;
-        $teamUser->save();
-
-        return response()->json(['success'=>'true','data'=>$team,'data2'=>$teamUser],201);
+    public function teamList(){
+     $userTeams = UserTeam::where('id_user',Auth::guard('api')->id())->get(['id_team']);
+      //echo $userTeam;
+      $teamArray=[];
+      foreach ($userTeams as $user_team) {
+          $teamArray[] = Team::where('id',$user_team->id_team)->get();
+          // $teamArray[] = UserTeam::where('id_team',$user_team->id)->get();
+       }
+      return response()->json(['success'=>'true','data'=>$teamArray],200);
     }
 
     public function update(Request $request, Team $team)
     {
         $validator = Validator::make($request->all(), [
-            //'room_code' => 'unique:team,room_code',
+            'room_code' => 'unique:team,room_code',
             'room_name' => 'required',
             'business_hour_start' => 'required',
             'business_hour_end' => 'required',
@@ -64,40 +66,18 @@ class TeamController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
-        //$team->room_code = Str::random(10);
+        $team->room_code = Str::random(10);
         $team->update($request->all());
 
-        return response()->json(['success'=>'true','data'=>$team],200);
+        return response()->json($team, 200);
     }
 
     public function delete(Team $team)
     {
         $team->delete();
 
-        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
+        return response()->json(null, 204);
     }
 
-    public function join(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'room_code' => 'required',
-            'role' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
-        }
 
-        $room = Team::where('room_code',$request->room_code)->first();
-        if($room==null){
-            return response()->json(['error'=>'room not found'], 404);
-        }
-
-        $teamUser = new UserTeam;
-        $teamUser->id_team = $room->id;
-        $teamUser->id_user = Auth::guard('api')->id();
-        $teamUser->id_role = $request->role;
-        $teamUser->save();
-
-        return response()->json(['message'=>"you have successfully joined a team"], 200);
-    }
 }
