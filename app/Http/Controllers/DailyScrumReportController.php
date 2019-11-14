@@ -68,15 +68,21 @@ class DailyScrumReportController extends Controller
     }
 
     public function check(Request $request){
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
       $todayDate = date('Y-m-d');
       $query = DailyScrumReport::where('id_user',Auth::guard('api')->id())
                                 ->whereDate('created_at',$todayDate)
                                 ->where('id_team',$request->id_team)->count();
       if ($query > 0) {
         return response()->json(['message'=>'sudah mengisi data hari ini']);
-    } else {
+      } else {
         return response()->json(['message'=>'Belum mengisi data hari ini']);
-    }
+      }
     }
 
     public function update(Request $request, DailyScrumReport $dailyScrumReport)
