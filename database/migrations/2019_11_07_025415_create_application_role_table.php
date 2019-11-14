@@ -17,7 +17,7 @@ class CreateApplicationRoleTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_role');
             $table->unsignedBigInteger('id_application');
-            $table->foreign('id_role')->references('id')->on('ROLE')->change();
+            $table->foreign('id_role')->references('id')->on('role')->change();
             $table->foreign('id_application')->references('id')->on('application')->change();
             $table->timestamps();
         });
