@@ -17,8 +17,8 @@ class CreatePokeTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_team');
             $table->unsignedBigInteger('id_user');
-            $table->foreign('id_team')->references('id')->on('TEAM')->change();
-            $table->foreign('id_user')->references('id')->on('USERS')->change();
+            $table->foreign('id_team')->references('id')->on('team')->change();
+            $table->foreign('id_user')->references('id')->on('users')->change();
             $table->string('content');
             $table->timestamps();
         });
