@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Str;
+use App\User;
 use App\Team;
 use App\UserTeam;
 class TeamController extends Controller
@@ -45,13 +46,18 @@ class TeamController extends Controller
 
     public function teamList(){
      $userTeams = UserTeam::where('id_user',Auth::guard('api')->id())->get(['id_team']);
-      //echo $userTeam;
-      $teamArray=[];
+
+      $teamArray= array();
+      $i=0;
       foreach ($userTeams as $user_team) {
-          $teamArray[] = Team::where('id',$user_team->id_team)->get();
-          // $teamArray[] = UserTeam::where('id_team',$user_team->id)->get();
+          $teamArray[$i]['details'] = Team::where('id',$user_team->id_team)->get();
+          $query = UserTeam::where('id_team',$user_team->id_team)->first()->id_user;
+
+           $teamArray[$i]['manager'] = User::where('id',$query)->get();
+           $i++;
        }
-      return response()->json(['success'=>'true','data'=>$teamArray],200);
+       //echo $teamArray;
+      return response()->json(['success'=>'true','dataTeam'=>$teamArray],200);
     }
 
     public function test(){
