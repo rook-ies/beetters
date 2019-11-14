@@ -26,7 +26,7 @@ class AppProductivityTypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $AppProductivity = AppProductivityType::create($request->all());
@@ -46,7 +46,7 @@ class AppProductivityTypeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $AppProductivity->update($request->all());

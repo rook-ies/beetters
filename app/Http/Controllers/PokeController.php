@@ -9,12 +9,12 @@ class PokeController extends Controller
 {
   public function index()
   {
-      return Poke::all();
+      return response()->json(['success'=>'true','data'=>Poke::all()],201);
   }
 
   public function show(Poke $poke)
   {
-      return $poke;
+      return response()->json(['success'=>'true','data'=>$poke],201);
   }
 
   public function store(Request $request)
@@ -27,7 +27,7 @@ class PokeController extends Controller
       ]);
 
       if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 401);
+          return response()->json(['error'=>$validator->errors()], 200);
       }
 
       $poke = new Poke;
@@ -35,7 +35,7 @@ class PokeController extends Controller
       $poke->id_user = $request->id_user;
       $poke->id_team = $request->id_team;
       $poke->save();
-      return response()->json($poke, 201);
+      return response()->json(['success'=>'true','data'=>$poke],201);
   }
 
   public function update(Request $request, Poke $poke)
@@ -47,7 +47,7 @@ class PokeController extends Controller
       ]);
 
       if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 401);
+          return response()->json(['error'=>$validator->errors()], 200);
       }
       $poke->update($request->all());
 

@@ -23,7 +23,7 @@ class ObstacleController extends Controller
       ]);
 
       if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 401);
+          return response()->json(['error'=>$validator->errors()], 200);
       }
 
       $obstacle = Obstacle::create($request->all());
@@ -44,7 +44,7 @@ class ObstacleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $obstacle->update($request->all());
