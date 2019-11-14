@@ -19,7 +19,7 @@ class CreateDailyTrackingReportsTable extends Migration
             $table->double('productive_value', 6, 2);
             $table->double('netral_value', 6, 2);
             $table->double('not_productive_value', 6, 2);
-            $table->foreign('id_user')->references('id')->on('USERS')->change();
+            $table->foreign('id_user')->references('id')->on('users')->change();
             $table->timestamps();
         });
     }

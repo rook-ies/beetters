@@ -13,15 +13,15 @@ class CreateUserTeam extends Migration
      */
     public function up()
     {
-        Schema::create('USER_TEAM', function (Blueprint $table) {
+        Schema::create('user_team', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_team');
             $table->unsignedBigInteger('id_role');
             $table->timestamps();
-            $table->foreign('id_user')->references('id')->on('USERS')->change();
-            $table->foreign('id_team')->references('id')->on('TEAM')->change();
-            $table->foreign('id_role')->references('id')->on('ROLE')->change();
+            $table->foreign('id_user')->references('id')->on('users')->change();
+            $table->foreign('id_team')->references('id')->on('team')->change();
+            $table->foreign('id_role')->references('id')->on('role')->change();
         });
     }
 
@@ -32,6 +32,6 @@ class CreateUserTeam extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('USER_TEAM');
+        Schema::dropIfExists('user_team');
     }
 }
