@@ -113,6 +113,5 @@ class TeamController extends Controller
         $teamUser->id_user = Auth::guard('api')->id();
         $teamUser->id_role = $request->role;
         $teamUser->save();
-
-
+      }
 }
