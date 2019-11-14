@@ -29,7 +29,7 @@ class ApplicationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $application = Application::create($request->all());
@@ -51,7 +51,7 @@ class ApplicationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $application->update($request->all());

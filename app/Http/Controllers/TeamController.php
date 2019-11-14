@@ -13,19 +13,21 @@ class TeamController extends Controller
 {
     public function index()
     {
-        return Team::all();
+        return response()->json(['success'=>'true','message'=>Team::all()],200);
+
     }
 
     public function show(Team $team)
     {
-        return $team;
+        return response()->json(['success'=>'true','data'=>$team],200);
+
     }
 
     public function store(Request $request)
     {
         //$team = Team::create($request->all());
         $validator = Validator::make($request->all(), [
-            //'room_code' => 'required|unique:team,room_code',
+            'room_code' => 'required|unique:team,room_code',
             'room_name' => 'required',
             'business_hour_start' => 'required',
             'business_hour_end' => 'required',
@@ -36,12 +38,21 @@ class TeamController extends Controller
         }
 
         $team = new Team;
-        $team->room_code = Str::random(10);
+        //$team->room_code = Str::random(10);
+        $team->room_code = $request->room_code;
         $team->room_name = $request->room_name;
         $team->business_hour_start = $request->business_hour_start;
         $team->business_hour_end = $request->business_hour_end;
         $team->save();
-        return response()->json($team, 201);
+
+        //setalah buat langsung join
+        $teamUser = new UserTeam;
+        $teamUser->id_team = $team->id;
+        $teamUser->id_user = Auth::guard('api')->id();
+        $teamUser->id_role = 1;
+        $teamUser->save();
+
+        return response()->json(['success'=>'true','data'=>$team,'data2'=>$teamUser],201);
     }
 
     public function teamList(){
@@ -78,19 +89,21 @@ class TeamController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
         $team->room_code = Str::random(10);
         $team->update($request->all());
 
-        return response()->json($team, 200);
+        return response()->json(['success'=>'true','data'=>'$team'],200);
+
     }
 
     public function delete(Team $team)
     {
         $team->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
+
     }
 
     public function join(Request $request)
@@ -111,7 +124,7 @@ class TeamController extends Controller
                         ->where('id_team', $room->id)->count();
 
         if($ada){
-            return response()->json(['error'=>'You already joined this team'], 200);
+            return response()->json(['message'=>'You already joined this team'], 200);
         }
 
         $teamUser = new UserTeam;
@@ -119,5 +132,7 @@ class TeamController extends Controller
         $teamUser->id_user = Auth::guard('api')->id();
         $teamUser->id_role = $request->role;
         $teamUser->save();
+
+        return response()->json(['message'=>'You successfully joined this team'], 200);
       }
 }

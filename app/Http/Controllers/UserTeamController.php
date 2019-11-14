@@ -10,12 +10,12 @@ class UserTeamController extends Controller
 {
     public function index()
     {
-        return UserTeam::all();
+        return response()->json(['success'=>'true','data'=>UserTeam::all();],201);
     }
 
     public function show(UserTeam $userTeam)
     {
-        return $userTeam;
+        return response()->json(['success'=>'true','data'=>$userTeam],201);
     }
 
     public function store(Request $request)
@@ -27,7 +27,7 @@ class UserTeamController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $userTeam = new UserTeam;
@@ -35,7 +35,7 @@ class UserTeamController extends Controller
         $userTeam->id_team = $request->id_team;
         $userTeam->id_role = $request->id_role;
         $userTeam->save();
-        return response()->json($userTeam, 201);
+        return response()->json(['success'=>'true','data'=>$userTeam],201);
     }
 
     public function update(Request $request, UserTeam $userTeam)
@@ -46,17 +46,17 @@ class UserTeamController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
         $userTeam->update($request->all());
 
-        return response()->json($userTeam, 200);
+        return response()->json(['success'=>'true','data'=>$userTeam],201);
     }
 
     public function delete(UserTeam $userTeam)
     {
         $userTeam->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message'=>'You successfully joined this team'], 200);
     }
 }

@@ -25,7 +25,7 @@ class RoleController extends Controller
       ]);
 
       if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 401);
+          return response()->json(['error'=>$validator->errors()], 200);
       }
 
       $role = new Role;
@@ -41,7 +41,7 @@ class RoleController extends Controller
       ]);
 
       if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 401);
+          return response()->json(['error'=>$validator->errors()], 200);
       }
       $role->update($request->all());
 
