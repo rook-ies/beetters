@@ -55,4 +55,9 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
     }
 
+    public function testServer()
+    {
+        return "berhasil konek ke server api";
+    }
+
 }
