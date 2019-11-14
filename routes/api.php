@@ -63,8 +63,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('daily-scrum-report', 'DailyScrumReportController@index');
     Route::get('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@show');
     Route::post('daily-scrum-report', 'DailyScrumReportController@store');
-    Route::put('daily-scrum-report/{dailyScrumReport-report}', 'DailyScrumReportController@update');
+    Route::put('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@update');
     Route::delete('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@delete');
+    Route::post('daily-scrum-report/check','DailyScrumReportController@check');
 
     Route::get('app-productivity-type', 'AppProductivityTypeController@index');
     Route::get('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@show');
@@ -78,6 +79,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('team/{team}', 'TeamController@update');
     Route::delete('team/{team}', 'TeamController@delete');
     Route::post('team/join', 'TeamController@join');
+    Route::post('team/team-list','TeamController@teamList');
+    Route::get('team/test','TeamController@test');
 
     Route::get('user-team', 'UserTeamController@index');
     Route::get('user-team/{userTeam}', 'UserTeamController@show');

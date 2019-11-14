@@ -9,17 +9,17 @@ class PokeController extends Controller
 {
   public function index()
   {
-      return response()->json(['success'=>'true','data'=>Poke::all()],200);
+      return Poke::all();
   }
 
   public function show(Poke $poke)
   {
-      return response()->json(['success'=>'true','data'=>$poke],200);
+      return $poke;
   }
 
   public function store(Request $request)
   {
-      //
+      //$poke = Poke::create($request->all());
       $validator = Validator::make($request->all(), [
           'content' => 'required',
           'id_team' => 'required',
@@ -30,8 +30,12 @@ class PokeController extends Controller
           return response()->json(['error'=>$validator->errors()], 401);
       }
 
-      $poke = Poke::create($request->all());
-      return response()->json(['success'=>'true','data'=>$poke],201);
+      $poke = new Poke;
+      $poke->content = $request->content;
+      $poke->id_user = $request->id_user;
+      $poke->id_team = $request->id_team;
+      $poke->save();
+      return response()->json($poke, 201);
   }
 
   public function update(Request $request, Poke $poke)
@@ -47,13 +51,13 @@ class PokeController extends Controller
       }
       $poke->update($request->all());
 
-      return response()->json(['success'=>'true','data'=>$poke],200);
+      return response()->json($poke, 200);
   }
 
   public function delete(Poke $poke)
   {
       $poke->delete();
 
-      return response()->json(['success'=>'true','message'=>'successfully delete'],200);
+      return response()->json(null, 204);
   }
 }
