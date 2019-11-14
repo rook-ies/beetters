@@ -84,18 +84,18 @@ class TeamController extends Controller
             'role' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         }
 
         $room = Team::where('room_code',$request->room_code)->first();
         if($room==null){
-            return response()->json(['error'=>'room not found'], 404);
+            return response()->json(['error'=>'room not found'], 200);
         }
         $ada = UserTeam::where('id_user',Auth::guard('api')->id())
                         ->where('id_team', $room->id)->count();
 
         if($ada){
-            return response()->json(['error'=>'You already joined this team'], 400);
+            return response()->json(['error'=>'You already joined this team'], 200);
         }
 
         $teamUser = new UserTeam;
