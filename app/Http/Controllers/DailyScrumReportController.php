@@ -108,4 +108,31 @@ class DailyScrumReportController extends Controller
 
         return response()->json(['success'=>'true','message'=>'successfully delete'],200);
     }
+
+    public function list(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $todayDate = date('Y-m-d');
+        $result = DailyScrumReport::where('id_team', $request->id)
+                                 ->whereDate('created_at', $todayDate)
+                                ->get();
+        $daily=array();
+        $i=0;
+        foreach ($result as $key) {
+            $daily[$i]['daily'] = $key;
+            $j=0;
+            $obs = Obstacle::where('id_daily_scrum_report',$key->id)->get();
+            foreach ($obs as $ob) {
+                $daily[$i]['obstacle'][$j] = $ob;
+                $j++;
+            }
+            $i++;
+        }
+        return response()->json(['success'=>'true','data'=>$daily],200);
+    }
 }

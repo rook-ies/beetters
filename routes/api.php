@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@update');
     Route::delete('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@delete');
     Route::post('daily-scrum-report/check','DailyScrumReportController@check');
+    Route::post('daily-scrum-report/list','DailyScrumReportController@list');
 
     Route::get('app-productivity-type', 'AppProductivityTypeController@index');
     Route::get('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@show');
