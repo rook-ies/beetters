@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('team/{team}', 'TeamController@delete');
     Route::post('team/join', 'TeamController@join');
     Route::post('team/team-list','TeamController@teamList');
+    Route::post('team/member','TeamController@member');
     Route::get('team/test','TeamController@test');
 
     Route::get('user-team', 'UserTeamController@index');
