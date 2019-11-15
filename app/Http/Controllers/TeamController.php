@@ -144,13 +144,14 @@ class TeamController extends Controller
           if ($validator->fails()) {
               return response()->json(['error'=>$validator->errors()], 200);
           }
-          $userTeams = UserTeam::where('id_team',$request->id)->orderBy('id_role', 'asc')->get(['id_user']);
+          $userTeams = UserTeam::where('id_team',$request->id)->orderBy('id_role', 'asc')->get();
           // return $userTeams;
           $memberArray= array();
           $i=0;
           foreach ($userTeams as $member) {
-              echo $member->id_user;
-              $memberArray[$i] = User::where('id', $member->id_user)->get();
+              // echo $member;
+              $memberArray[$i]['user'] = User::where('id', $member->id_user)->get();
+              $memberArray[$i]['role'] = $member->id_role;
               $i++;
            }
           return response()->json(['success'=>'true','data'=>$memberArray],200);
