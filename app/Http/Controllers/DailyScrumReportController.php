@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\DailyScrumReport;
 use App\Obstacle;
+use App\UserTeam;
+use App\User;
 
 class DailyScrumReportController extends Controller
 {
@@ -41,7 +44,7 @@ class DailyScrumReportController extends Controller
         $dailyScrumReport->next_24_hour_activities = $request->next_24_hour_activities;
         $dailyScrumReport->save();
 
-        $obstacles = $request->obstaclesb;
+        $obstacles = $request->obstacles;
 
         foreach ($obstacles as $obstacle) {
             // $validatorObstacle = Validator::make($request->all(), [
@@ -60,10 +63,49 @@ class DailyScrumReportController extends Controller
             $obstacleTable->save();
         }
 
-        return response()->json(['success'=>'true','data'=>$dailyScrumReport,'data2'=>$obstacles],201);
+        return response()->json(['success'=>'true','data'=>$dailyScrumReport],201);
     }
 
-    public function getObstacle(Request $request){
+    public function complete(Request $request){
+      $validator = Validator::make($request->all(), [
+          'id' => 'required',
+          'date' => 'required',
+      ]);
+      if ($validator->fails()) {
+          return response()->json(['error'=>$validator->errors()], 200);
+      }
+
+      $originalDate = $request->date;
+      $date = date("Y-m-d", strtotime($originalDate));
+
+      $userTeams = UserTeam::where('id_team',$request->id)->orderBy('id_role', 'asc')->get('id_user');
+      $dailyTeam = DailyScrumReport::whereDate('created_at',$date)
+                                ->where('id_team',$request->id)->get('id_user');
+      $memberArray= array();
+      // echo $userTeams;
+      // echo $dailyTeam;
+      $i=0;
+        foreach ($userTeams as $member) {
+            $found = 0;
+            foreach ($dailyTeam as $key) {
+              // echo $member->id_user;
+              // echo $key->id_user;
+              if($member->id_user == $key->id_user)
+                $found=1;
+            }
+            if ($found == 1) {
+               $memberArray[$i]['status'] = "complete";
+            } else {
+               $memberArray[$i]['status'] = "not complete";
+
+            }
+            $memberArray[$i]['user_detail'] = User::where('id',$member->id_user)->first();
+
+            $i++;
+
+        }
+
+      return response()->json(['success'=>'true','data'=>$memberArray],200);
 
     }
 
@@ -117,9 +159,10 @@ class DailyScrumReportController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 200);
         }
-        $todayDate = date('Y-m-d');
+        $originalDate = $request->date;
+        $date = date("Y-m-d", strtotime($originalDate));
         $result = DailyScrumReport::where('id_team', $request->id)
-                                 ->whereDate('created_at', $todayDate)
+                                 ->whereDate('created_at', $date)
                                 ->get();
         $daily=array();
         $i=0;

@@ -10,7 +10,7 @@ class UserTeamController extends Controller
 {
     public function index()
     {
-        return response()->json(['success'=>'true','data'=>UserTeam::all();],201);
+        return response()->json(['success'=>'true','data'=>UserTeam::all()],201);
     }
 
     public function show(UserTeam $userTeam)
