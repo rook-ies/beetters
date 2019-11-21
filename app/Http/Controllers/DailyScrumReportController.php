@@ -46,7 +46,7 @@ class DailyScrumReportController extends Controller
 
         $obstacles = $request->obstacles;
 
-        foreach ($obstacles as $obstacle) {
+        // foreach ($obstacles as $obstacle) {
             // $validatorObstacle = Validator::make($request->all(), [
             //     'content' => 'required',
             // ]);
@@ -58,10 +58,11 @@ class DailyScrumReportController extends Controller
             $obstacleTable = new Obstacle;
             // $obstacleTable->id_daily_scrum_report = 7;
             $obstacleTable->id_daily_scrum_report = $dailyScrumReport->id;
-            $obstacleTable->content = $obstacle['content'];
+            // $obstacleTable->content = $obstacle['content'];
+            $obstacleTable->content = $request->obstacle;
 
             $obstacleTable->save();
-        }
+        // }
 
         return response()->json(['success'=>'true','data'=>$dailyScrumReport],201);
     }
