@@ -84,6 +84,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('team/team-list','TeamController@teamList');
     Route::post('team/member','TeamController@member');
     Route::get('team/test','TeamController@test');
+    Route::post('team/kick','TeamController@kick');
 
     Route::get('user-team', 'UserTeamController@index');
     Route::get('user-team/{userTeam}', 'UserTeamController@show');
