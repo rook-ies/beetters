@@ -44,7 +44,7 @@ class DailyScrumReportController extends Controller
         $dailyScrumReport->next_24_hour_activities = $request->next_24_hour_activities;
         $dailyScrumReport->save();
 
-        $obstacles = $request->obstacles;
+        //$obstacles = $request->obstacles;
 
         // foreach ($obstacles as $obstacle) {
             // $validatorObstacle = Validator::make($request->all(), [
