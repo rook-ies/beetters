@@ -156,4 +156,16 @@ class TeamController extends Controller
            }
           return response()->json(['success'=>'true','data'=>$memberArray],200);
       }
+
+      public function kick(Request $request){
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+            'id_user' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $userTeams = UserTeam::where('id_team',$request->id_team)->where('id_user',$request->id_user)->delete();
+        return response()->json(['success'=>'true','message'=>'successfully kick member'],200);
+      }
 }
