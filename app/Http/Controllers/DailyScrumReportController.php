@@ -172,9 +172,14 @@ class DailyScrumReportController extends Controller
             $daily[$i]['daily'] = $key;
             $j=0;
             $obs = Obstacle::where('id_daily_scrum_report',$key->id)->get();
-            foreach ($obs as $ob) {
-                $daily[$i]['obstacle'][$j] = $ob;
-                $j++;
+            $num = $obs->count();
+            if($num>0){
+                foreach ($obs as $ob) {
+                    $daily[$i]['obstacle'][$j] = $ob;
+                    $j++;
+                }
+            }else{
+                $daily[$i]['obstacle'][0] = "----";
             }
             $i++;
         }
