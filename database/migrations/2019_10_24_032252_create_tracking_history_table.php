@@ -16,9 +16,6 @@ class CreateTrackingHistoryTable extends Migration
         Schema::create('tracking_history', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_user');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->integer('duration');
             $table->foreign('id_user')->references('id')->on('users')->change();
             $table->timestamps();
         });

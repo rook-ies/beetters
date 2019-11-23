@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('application-tracking-history', 'ApplicationTrackingHistoryController@store');
     Route::put('application-tracking-history/{applicationTrackingHistory}', 'ApplicationTrackingHistoryController@update');
     Route::delete('application-tracking-history/{trackingHistory}', 'ApplicationTrackingHistoryController@delete');
+    Route::post('application-tracking-history/data', 'ApplicationTrackingHistoryController@acceptRespones');
 
     Route::get('tracking-history', 'TrackingHistoryController@index');
     Route::get('tracking-history/{trackingHistory}', 'TrackingHistoryController@show');

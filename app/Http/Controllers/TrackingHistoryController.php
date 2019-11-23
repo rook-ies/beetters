@@ -17,21 +17,21 @@ class TrackingHistoryController extends Controller
 
     public function store(Request $request)
     {
-      $validator = Validator::make($request->all(), [
-          'start_time' => 'required',
-          'end_time' => 'required',
-          'duration' => 'required',
-      ]);
-
-      if ($validator->fails()) {
-          return response()->json(['error'=>$validator->errors()], 200);
-      }
+      // $validator = Validator::make($request->all(), [
+      //     'start_time' => 'required',
+      //     'end_time' => 'required',
+      //     'duration' => 'required',
+      // ]);
+      //
+      // if ($validator->fails()) {
+      //     return response()->json(['error'=>$validator->errors()], 200);
+      // }
 
       $trackingHistory = new TrackingHistory;
       $trackingHistory->id_user = Auth::guard('api')->id();
-      $trackingHistory->start_time = $request->start_time;
-      $trackingHistory->end_time = $request->end_time;
-      $trackingHistory->duration = $request->duration;
+      // $trackingHistory->start_time = $request->start_time;
+      // $trackingHistory->end_time = $request->end_time;
+      // $trackingHistory->duration = $request->duration;
       $trackingHistory->save();
 
       return response()->json(['success'=>'true','data'=>$trackingHistory],201);
@@ -44,15 +44,15 @@ class TrackingHistoryController extends Controller
 
     public function update(Request $request,TrackingHistory $trackingHistory)
     {
-        $validator = Validator::make($request->all(), [
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'duration' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 200);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'start_time' => 'required',
+        //     'end_time' => 'required',
+        //     'duration' => 'required',
+        // ]);
+        //
+        // if ($validator->fails()) {
+        //     return response()->json(['error'=>$validator->errors()], 200);
+        // }
 
         $trackingHistory->update($request->all());
         return response()->json(['success'=>'true','data'=>$trackingHistory],201);
