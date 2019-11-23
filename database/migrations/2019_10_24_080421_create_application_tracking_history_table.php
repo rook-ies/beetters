@@ -17,6 +17,9 @@ class CreateApplicationTrackingHistoryTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_tracking_history');
             $table->unsignedBigInteger('id_application');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+            $table->integer('duration');
             $table->foreign('id_tracking_history')->references('id')->on('tracking_history')->change();
             $table->foreign('id_application')->references('id')->on('application')->change();
             $table->timestamps();
