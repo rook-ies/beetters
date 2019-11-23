@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\DailyTrackingReport;
+use App\UserTeam;
+use App\User;
 class DailyTrackingReportController extends Controller
 {
     public function index()
@@ -63,5 +65,88 @@ class DailyTrackingReportController extends Controller
         $dailyTrackingReport->delete();
 
         return response()->json(['success'=>'true','message'=>'successfully delete'],200);
+    }
+    public function overalPerUser()
+    {
+        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
+        if($dailyTrackingReportCount>0){
+            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
+            $total=0;
+            $pembagi=$dailyTrackingReportCount;
+            foreach ($dailyTrackingReport as $key) {
+                $total = $total + $key['productive_value'];
+            }
+            $total = $total/$pembagi;
+            //echo "total : ".$total;
+            return response()->json(['success'=>'true','productive_value'=>$total],200);
+        }
+        else{
+            return response()->json(['success'=>'true','productive_value'=>0],200);
+        }
+    }
+    public function overalPerTeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $userTeams = UserTeam::where('id_team',$request->id_team)->orderBy('id_role', 'asc')->get();
+
+        $i=0;
+        $grandTotal=0;
+        foreach ($userTeams as $member) {
+            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->count();
+            if($dailyTrackingReportCount>0){
+                $dailyTrackingReport = DailyTrackingReport::where('id_user', $member->id_user)->get();
+                $total=0;
+                $pembagi=$dailyTrackingReportCount;
+                foreach ($dailyTrackingReport as $key) {
+                    $total = $total + $key['productive_value'];
+                }
+                $total = $total/$pembagi;
+                //echo "total : ".$total;
+                $grandTotal = $grandTotal + $total;
+            }
+            $i++;
+         }
+        $grandTotal = $grandTotal/$i;
+        // echo $grandTotal;
+        return response()->json(['success'=>'true','productive_value'=>$grandTotal],200);
+    }
+    public function overalPerMemberTeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $userTeams = UserTeam::where('id_team',$request->id_team)->orderBy('id_role', 'asc')->get();
+
+        $i=0;
+        $memberArray= array();
+        foreach ($userTeams as $member) {
+            $memberArray[$i]['user'] = User::where('id', $member->id_user)->first();
+            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->count();
+            if($dailyTrackingReportCount>0){
+                $dailyTrackingReport = DailyTrackingReport::where('id_user', $member->id_user)->get();
+                $total=0;
+                $pembagi=$dailyTrackingReportCount;
+                foreach ($dailyTrackingReport as $key) {
+                    $total = $total + $key['productive_value'];
+                }
+                $total = $total/$pembagi;
+                //echo "total : ".$total;
+                $memberArray[$i]['productive_value'] = $total;
+            }else{
+                $memberArray[$i]['productive_value'] = 0;
+            }
+            $i++;
+         }
+         krsort($memberArray);
+        // echo $grandTotal;
+        return response()->json(['success'=>'true','data'=>$memberArray],200);
     }
 }
