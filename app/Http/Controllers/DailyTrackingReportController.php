@@ -204,7 +204,15 @@ class DailyTrackingReportController extends Controller
             }
             $i++;
          }
-         krsort($memberArray);
+         function sortBySubkey(&$array, $subkey, $sortType = SORT_DESC) {
+            foreach ($array as $subarray) {
+                $keys[] = $subarray[$subkey];
+            }
+            array_multisort($keys, $sortType, $array);
+        }
+        $keys = "value";
+        sortBySubkey($memberArray, $keys);
+         //arsort($memberArray);
         // echo $grandTotal;
         return response()->json(['success'=>'true','data'=>$memberArray],200);
     }
