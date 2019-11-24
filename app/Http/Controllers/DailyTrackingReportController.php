@@ -71,18 +71,55 @@ class DailyTrackingReportController extends Controller
         $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
         if($dailyTrackingReportCount>0){
             $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
-            $total=0;
+            $productiveValue=0;
+            $netralValue=0;
+            $notProductiveValue=0;
             $pembagi=$dailyTrackingReportCount;
             foreach ($dailyTrackingReport as $key) {
-                $total = $total + $key['productive_value'];
+                $productiveValue = $productiveValue + $key['productive_value'];
+                $netralValue = $netralValue + $key['netral_value'];
+                $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
             }
-            $total = $total/$pembagi;
+            $productiveValue = $productiveValue/$pembagi;
+            $netralValue = $netralValue/$pembagi;
+            $notProductiveValue = $notProductiveValue/$pembagi;
             //echo "total : ".$total;
-            return response()->json(['success'=>'true','productive_value'=>$total],200);
+            $data['value']['productive_value'] = $productiveValue;
+            $data['value']['netral_value'] = $netralValue;
+            $data['value']['not_productive_value'] = $notProductiveValue;
         }
         else{
-            return response()->json(['success'=>'true','productive_value'=>0],200);
+            $data['value']['productive_value'] = 0;
+            $data['value']['netral_value'] = 0;
+            $data['value']['not_productive_value'] = 0;
         }
+
+        return response()->json(['success'=>'true','data'=>$data],200);
+    }
+    public function historyPerUser()
+    {
+        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
+        if($dailyTrackingReportCount>0){
+            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
+            $productiveValue=0;
+            $netralValue=0;
+            $notProductiveValue=0;
+            $pembagi=$dailyTrackingReportCount;
+            $i=0;
+            foreach ($dailyTrackingReport as $key) {
+                $data[$i]['value']['productive_value'] = $key['productive_value'];
+                $data[$i]['value']['netral_value'] =  $key['netral_value'];
+                $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
+                $i++;
+            }
+        }
+        else{
+            $data[0]['value']['productive_value'] = 0;
+            $data[0]['value']['netral_value'] = 0;
+            $data[0]['value']['not_productive_value'] = 0;
+        }
+
+        return response()->json(['success'=>'true','data'=>$data],200);
     }
     public function overalPerTeam(Request $request)
     {
@@ -95,25 +132,37 @@ class DailyTrackingReportController extends Controller
         $userTeams = UserTeam::where('id_team',$request->id_team)->orderBy('id_role', 'asc')->get();
 
         $i=0;
-        $grandTotal=0;
+        $grandTotal['value']['productive_value']=0;
+        $grandTotal['value']['netral_value']=0;
+        $grandTotal['value']['not_productive_value']=0;
         foreach ($userTeams as $member) {
             $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->count();
             if($dailyTrackingReportCount>0){
                 $dailyTrackingReport = DailyTrackingReport::where('id_user', $member->id_user)->get();
-                $total=0;
+                $productiveValue=0;
+                $netralValue=0;
+                $notProductiveValue=0;
                 $pembagi=$dailyTrackingReportCount;
                 foreach ($dailyTrackingReport as $key) {
-                    $total = $total + $key['productive_value'];
+                    $productiveValue = $productiveValue + $key['productive_value'];
+                    $netralValue = $netralValue + $key['netral_value'];
+                    $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
                 }
-                $total = $total/$pembagi;
+                $productiveValue = $productiveValue/$pembagi;
+                $netralValue = $netralValue/$pembagi;
+                $notProductiveValue = $notProductiveValue/$pembagi;
                 //echo "total : ".$total;
-                $grandTotal = $grandTotal + $total;
+                $grandTotal['value']['productive_value'] = $grandTotal['value']['productive_value'] + $productiveValue;
+                $grandTotal['value']['netral_value'] = $grandTotal['value']['netral_value'] + $netralValue;
+                $grandTotal['value']['not_productive_value'] = $grandTotal['value']['not_productive_value'] + $notProductiveValue;
             }
             $i++;
          }
-        $grandTotal = $grandTotal/$i;
+        $grandTotal['value']['productive_value'] = $grandTotal['value']['productive_value']/$i;
+        $grandTotal['value']['netral_value'] = $grandTotal['value']['netral_value']/$i;
+        $grandTotal['value']['not_productive_value'] = $grandTotal['value']['not_productive_value']/$i;
         // echo $grandTotal;
-        return response()->json(['success'=>'true','productive_value'=>$grandTotal],200);
+        return response()->json(['success'=>'true','data'=>$grandTotal],200);
     }
     public function overalPerMemberTeam(Request $request)
     {
@@ -132,16 +181,26 @@ class DailyTrackingReportController extends Controller
             $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->count();
             if($dailyTrackingReportCount>0){
                 $dailyTrackingReport = DailyTrackingReport::where('id_user', $member->id_user)->get();
-                $total=0;
+                $productiveValue=0;
+                $netralValue=0;
+                $notProductiveValue=0;
                 $pembagi=$dailyTrackingReportCount;
                 foreach ($dailyTrackingReport as $key) {
-                    $total = $total + $key['productive_value'];
+                    $productiveValue = $productiveValue + $key['productive_value'];
+                    $netralValue = $netralValue + $key['netral_value'];
+                    $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
                 }
-                $total = $total/$pembagi;
+                $productiveValue = $productiveValue/$pembagi;
+                $netralValue = $netralValue/$pembagi;
+                $notProductiveValue = $notProductiveValue/$pembagi;
                 //echo "total : ".$total;
-                $memberArray[$i]['productive_value'] = $total;
+                $memberArray[$i]['value']['productive_value'] = $productiveValue;
+                $memberArray[$i]['value']['netral_value'] = $netralValue;
+                $memberArray[$i]['value']['not_productive_value'] = $notProductiveValue;
             }else{
-                $memberArray[$i]['productive_value'] = 0;
+                $memberArray[$i]['value']['productive_value'] = 0;
+                $memberArray[$i]['value']['netral_value'] = 0;
+                $memberArray[$i]['value']['not_productive_value'] = 0;
             }
             $i++;
          }
