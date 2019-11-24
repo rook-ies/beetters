@@ -110,4 +110,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('daily-tracking-report', 'DailyTrackingReportController@store');
     Route::put('daily-tracking-report/{dailyTrackingReport}', 'DailyTrackingReportController@update');
     Route::delete('daily-tracking-report/{dailyTrackingReport}', 'DailyTrackingReportController@delete');
+    Route::post('daily-tracking-report/overal-per-user', 'DailyTrackingReportController@overalPerUser');
+    Route::post('daily-tracking-report/history-per-user', 'DailyTrackingReportController@historyPerUser');
+    Route::post('daily-tracking-report/overal-per-team', 'DailyTrackingReportController@overalPerTeam');
+    Route::post('daily-tracking-report/overal-per-member-team', 'DailyTrackingReportController@overalPerMemberTeam');
 });
