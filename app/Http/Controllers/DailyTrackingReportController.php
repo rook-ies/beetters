@@ -90,19 +90,28 @@ class DailyTrackingReportController extends Controller
     }
     public function historyPerUser()
     {
-        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
+        $todayDate = date('Y-m-d');
+        $from =  date('Y-m-d',strtotime('-6 days',strtotime($todayDate)));
+        $to = $todayDate;
+        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereBetween('created_at', [$from, $to])->count();
         if($dailyTrackingReportCount>0){
-            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
-            $productiveValue=0;
-            $netralValue=0;
-            $notProductiveValue=0;
-            $pembagi=$dailyTrackingReportCount;
-            $i=0;
-            foreach ($dailyTrackingReport as $key) {
-                $data[$i]['value']['productive_value'] = $key['productive_value'];
-                $data[$i]['value']['netral_value'] =  $key['netral_value'];
-                $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
-                $i++;
+            $date=$from;
+            for ($i=0; $i < 7; $i++) {
+                $date = date('Y-m-d',strtotime('+'.$i.' days',strtotime($from)));
+                $dailyTrackingReportDate = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->count();
+                if($dailyTrackingReportDate>0){
+                    $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
+                    $data[$i]['value']['productive_value'] = $key['productive_value'];
+                    $data[$i]['value']['netral_value'] =  $key['netral_value'];
+                    $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
+                    $data[$i]['value']['date'] = $key['created_at'];
+                }
+                else{
+                    $data[$i]['value']['productive_value'] = 0;
+                    $data[$i]['value']['netral_value'] = 0;
+                    $data[$i]['value']['not_productive_value'] =  0;
+                    $data[$i]['value']['date'] = $date;
+                }
             }
         }
         else{
