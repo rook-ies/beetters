@@ -68,25 +68,17 @@ class DailyTrackingReportController extends Controller
     }
     public function overalPerUser()
     {
-        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
+        $todayDate = date('Y-m-d');
+        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at',$todayDate)->count();
         if($dailyTrackingReportCount>0){
-            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
-            $productiveValue=0;
+            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at',$todayDate)->first();
+            $productiveValue=
             $netralValue=0;
             $notProductiveValue=0;
             $pembagi=$dailyTrackingReportCount;
-            foreach ($dailyTrackingReport as $key) {
-                $productiveValue = $productiveValue + $key['productive_value'];
-                $netralValue = $netralValue + $key['netral_value'];
-                $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
-            }
-            $productiveValue = $productiveValue/$pembagi;
-            $netralValue = $netralValue/$pembagi;
-            $notProductiveValue = $notProductiveValue/$pembagi;
-            //echo "total : ".$total;
-            $data['value']['productive_value'] = $productiveValue;
-            $data['value']['netral_value'] = $netralValue;
-            $data['value']['not_productive_value'] = $notProductiveValue;
+            $data['value']['productive_value'] = $dailyTrackingReport->productive_value;
+            $data['value']['netral_value'] = $dailyTrackingReport->netral_value;
+            $data['value']['not_productive_value'] = $dailyTrackingReport->not_productive_value;
         }
         else{
             $data['value']['productive_value'] = 0;
