@@ -169,6 +169,7 @@ class DailyTrackingReportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_team' => 'required',
+            'date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 200);
@@ -176,28 +177,16 @@ class DailyTrackingReportController extends Controller
         $userTeams = UserTeam::where('id_team',$request->id_team)->orderBy('id_role', 'asc')->get();
 
         $i=0;
+        $date = $request->date;
         $memberArray= array();
         foreach ($userTeams as $member) {
             $memberArray[$i]['user'] = User::where('id', $member->id_user)->first();
-            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->count();
+            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->whereDate('created_at',$date)->count();
             if($dailyTrackingReportCount>0){
-                $dailyTrackingReport = DailyTrackingReport::where('id_user', $member->id_user)->get();
-                $productiveValue=0;
-                $netralValue=0;
-                $notProductiveValue=0;
-                $pembagi=$dailyTrackingReportCount;
-                foreach ($dailyTrackingReport as $key) {
-                    $productiveValue = $productiveValue + $key['productive_value'];
-                    $netralValue = $netralValue + $key['netral_value'];
-                    $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
-                }
-                $productiveValue = $productiveValue/$pembagi;
-                $netralValue = $netralValue/$pembagi;
-                $notProductiveValue = $notProductiveValue/$pembagi;
-                //echo "total : ".$total;
-                $memberArray[$i]['value']['productive_value'] = $productiveValue;
-                $memberArray[$i]['value']['netral_value'] = $netralValue;
-                $memberArray[$i]['value']['not_productive_value'] = $notProductiveValue;
+                $key = DailyTrackingReport::where('id_user', $member->id_user)->whereDate('created_at',$date)->first();
+                $memberArray[$i]['value']['productive_value'] = $key->productive_value;
+                $memberArray[$i]['value']['netral_value'] = $key->netral_value;
+                $memberArray[$i]['value']['not_productive_value'] = $key->not_productive_value;
             }else{
                 $memberArray[$i]['value']['productive_value'] = 0;
                 $memberArray[$i]['value']['netral_value'] = 0;
