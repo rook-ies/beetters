@@ -86,9 +86,9 @@ class DailyTrackingReportController extends Controller
             $netralValue=0;
             $notProductiveValue=0;
             $pembagi=$dailyTrackingReportCount;
-            $data['value']['productive_value'] = $dailyTrackingReport->productive_value;
-            $data['value']['netral_value'] = $dailyTrackingReport->netral_value;
-            $data['value']['not_productive_value'] = $dailyTrackingReport->not_productive_value;
+            $data['value'][0] = $dailyTrackingReport->productive_value;
+            $data['value'][1] = $dailyTrackingReport->netral_value;
+            $data['value'][2] = $dailyTrackingReport->not_productive_value;
 
             $trakingHistorysid = TrackingHistory::where('id_user',Auth::guard('api')->id())
                                     ->whereDate('created_at',$date)->first()->id;
@@ -116,7 +116,7 @@ class DailyTrackingReportController extends Controller
                     $k++;
                 }
             }
-            $data['value']['time_consumed'] = $gtt;
+            $data['time_consumed'] = $gtt;
         }
         else{
             $data['value']['time_consumed'] = 0;
