@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\DailyTrackingReport;
+use App\ApplicationTrackingHistory;
+use App\TrackingHistory;
+use App\Application;
 use App\UserTeam;
 use App\User;
 class DailyTrackingReportController extends Controller
@@ -66,57 +69,101 @@ class DailyTrackingReportController extends Controller
 
         return response()->json(['success'=>'true','message'=>'successfully delete'],200);
     }
-    public function overalPerUser()
+    public function overalPerUser(Request $request)
     {
-        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
+        $validator = Validator::make($request->all(), [
+            'date' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $date = $request->date;
+        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at',$date)->count();
         if($dailyTrackingReportCount>0){
-            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
-            $productiveValue=0;
+            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at',$date)->first();
+            $productiveValue=
             $netralValue=0;
             $notProductiveValue=0;
             $pembagi=$dailyTrackingReportCount;
-            foreach ($dailyTrackingReport as $key) {
-                $productiveValue = $productiveValue + $key['productive_value'];
-                $netralValue = $netralValue + $key['netral_value'];
-                $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
+            $data['value'][0] = $dailyTrackingReport->productive_value;
+            $data['value'][1] = $dailyTrackingReport->netral_value;
+            $data['value'][2] = $dailyTrackingReport->not_productive_value;
+
+            $trakingHistorysid = TrackingHistory::where('id_user',Auth::guard('api')->id())
+                                    ->whereDate('created_at',$date)->first()->id;
+            $gtt=0;
+            $applicationTrackingHistory = ApplicationTrackingHistory::
+                where('id_tracking_history',$trakingHistorysid)->get();
+
+            $i=0;
+            $j=0;
+            $k=0;
+            foreach ($applicationTrackingHistory as $key) {
+                $app = Application::where('id',$key->id_application)->first();
+                $gtt+=$key->duration;
+                if($app->id_app_productivity_type==1){
+                    $data['app']['productive'][$i]['name'] = $app->name;
+                    $data['app']['productive'][$i]['duration'] = $key->duration." second";
+                    $i++;
+                }else if($app->id_app_productivity_type==2){
+                    $data['app']['netral'][$j]['name'] = $app->name;
+                    $data['app']['netral'][$j]['duration'] = $key->duration." second";
+                    $j++;
+                }else{
+                    $data['app']['not_productive'][$k]['name'] = $app->name;
+                    $data['app']['not_productive'][$k]['duration'] = $key->duration." second";
+                    $k++;
+                }
             }
-            $productiveValue = $productiveValue/$pembagi;
-            $netralValue = $netralValue/$pembagi;
-            $notProductiveValue = $notProductiveValue/$pembagi;
-            //echo "total : ".$total;
-            $data['value']['productive_value'] = $productiveValue;
-            $data['value']['netral_value'] = $netralValue;
-            $data['value']['not_productive_value'] = $notProductiveValue;
+            $data['time_consumed'] = $gtt;
         }
         else{
+            $data['value']['time_consumed'] = 0;
             $data['value']['productive_value'] = 0;
             $data['value']['netral_value'] = 0;
             $data['value']['not_productive_value'] = 0;
+            $data['app']['productive'][0]['name'] = "nothing";
+            $data['app']['productive'][0]['duration'] = "0 second";
+            $data['app']['netral'][0]['name'] = "nothing";
+            $data['app']['netral'][0]['duration'] = "0 second";
+            $data['app']['not_productive'][0]['name'] = "nothing";
+            $data['app']['not_productive'][0]['duration'] = "0 second";
         }
 
         return response()->json(['success'=>'true','data'=>$data],200);
     }
     public function historyPerUser()
     {
-        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->count();
+        $todayDate = date('Y-m-d');
+        $from =  date('Y-m-d',strtotime('-6 days',strtotime($todayDate)));
+        $to = $todayDate;
+        $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereBetween('created_at', [$from, $to])->count();
         if($dailyTrackingReportCount>0){
-            $dailyTrackingReport = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->get();
-            $productiveValue=0;
-            $netralValue=0;
-            $notProductiveValue=0;
-            $pembagi=$dailyTrackingReportCount;
-            $i=0;
-            foreach ($dailyTrackingReport as $key) {
-                $data[$i]['value']['productive_value'] = $key['productive_value'];
-                $data[$i]['value']['netral_value'] =  $key['netral_value'];
-                $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
-                $i++;
+            $date=$from;
+            for ($i=0; $i < 7; $i++) {
+                $date = date('Y-m-d',strtotime('+'.$i.' days',strtotime($from)));
+                $dailyTrackingReportDate = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->count();
+                if($dailyTrackingReportDate>0){
+                    $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
+                    $data[$i]['value']['productive_value'] = $key['productive_value'];
+                    $data[$i]['value']['netral_value'] =  $key['netral_value'];
+                    $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
+                    $data[$i]['value']['date'] = $key['created_at'];
+                }
+                else{
+                    $data[$i]['value']['productive_value'] = 0;
+                    $data[$i]['value']['netral_value'] = 0;
+                    $data[$i]['value']['not_productive_value'] =  0;
+                    $data[$i]['value']['date'] = $date;
+                }
             }
         }
         else{
             $data[0]['value']['productive_value'] = 0;
             $data[0]['value']['netral_value'] = 0;
             $data[0]['value']['not_productive_value'] = 0;
+            $data[$i]['value']['date'] = $todayDate;
         }
 
         return response()->json(['success'=>'true','data'=>$data],200);
@@ -168,6 +215,7 @@ class DailyTrackingReportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_team' => 'required',
+            'date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 200);
@@ -175,28 +223,16 @@ class DailyTrackingReportController extends Controller
         $userTeams = UserTeam::where('id_team',$request->id_team)->orderBy('id_role', 'asc')->get();
 
         $i=0;
+        $date = $request->date;
         $memberArray= array();
         foreach ($userTeams as $member) {
             $memberArray[$i]['user'] = User::where('id', $member->id_user)->first();
-            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->count();
+            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $member->id_user)->whereDate('created_at',$date)->count();
             if($dailyTrackingReportCount>0){
-                $dailyTrackingReport = DailyTrackingReport::where('id_user', $member->id_user)->get();
-                $productiveValue=0;
-                $netralValue=0;
-                $notProductiveValue=0;
-                $pembagi=$dailyTrackingReportCount;
-                foreach ($dailyTrackingReport as $key) {
-                    $productiveValue = $productiveValue + $key['productive_value'];
-                    $netralValue = $netralValue + $key['netral_value'];
-                    $notProductiveValue = $notProductiveValue + $key['not_productive_value'];
-                }
-                $productiveValue = $productiveValue/$pembagi;
-                $netralValue = $netralValue/$pembagi;
-                $notProductiveValue = $notProductiveValue/$pembagi;
-                //echo "total : ".$total;
-                $memberArray[$i]['value']['productive_value'] = $productiveValue;
-                $memberArray[$i]['value']['netral_value'] = $netralValue;
-                $memberArray[$i]['value']['not_productive_value'] = $notProductiveValue;
+                $key = DailyTrackingReport::where('id_user', $member->id_user)->whereDate('created_at',$date)->first();
+                $memberArray[$i]['value']['productive_value'] = $key->productive_value;
+                $memberArray[$i]['value']['netral_value'] = $key->netral_value;
+                $memberArray[$i]['value']['not_productive_value'] = $key->not_productive_value;
             }else{
                 $memberArray[$i]['value']['productive_value'] = 0;
                 $memberArray[$i]['value']['netral_value'] = 0;

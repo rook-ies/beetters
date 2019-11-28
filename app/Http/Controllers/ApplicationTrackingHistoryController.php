@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ApplicationTrackingHistory;
+use App\DailyTrackingReport;
 use App\TrackingHistory;
 use App\Application;
 use Illuminate\Support\Facades\Auth;
@@ -85,34 +86,34 @@ class ApplicationTrackingHistoryController extends Controller
             $trakingHistorysid = TrackingHistory::where('id_user',Auth::guard('api')->id())
                                     ->whereDate('created_at',$todayDate)->first()->id;
         }
-        echo $trakingHistorysid;
+        // echo $trakingHistorysid;
 
         foreach ($dt as $key) {
-            echo "\n".$key['name'];
+            // echo "\n".$key['name'];
             $appCount = Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->count();
             //ada app nya app enggak
             if($appCount > 0){
-                echo "ada ";
+                // echo "ada ";
                 $appId = Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->first()->id;
-                echo "appID : ".$appId;
+                // echo "appID : ".$appId;
 
                 $applicationTrackingHistoryCount = ApplicationTrackingHistory::
                     where('id_tracking_history',$trakingHistorysid)
                     ->where('id_application',$appId)->count();
                 if($applicationTrackingHistoryCount>0){
-                    echo "\tuda ada";
+                    // echo "\tuda ada";
                     $applicationTrackingHistory = ApplicationTrackingHistory::
                         where('id_tracking_history',$trakingHistorysid)
                         ->where('id_application',$appId)->first();
-                    echo "mengupdate durasi id: ";
-                    echo $applicationTrackingHistory->id;
+                    // echo "mengupdate durasi id: ";
+                    // echo $applicationTrackingHistory->id;
                     $applicationTrackingHistory->duration = $applicationTrackingHistory->duration + $duration;
                     $applicationTrackingHistory->end_time =
                         date('Y-m-d H:i:s',strtotime('+'.$duration.' second',strtotime($applicationTrackingHistory->end_time)));
                     $applicationTrackingHistory->save();
                 }
                 else {
-                    echo "belm ada";
+                    // echo "belm ada";
                     $datetime = date('Y-m-d H:i:s');
                     $applicationTrackingHistory = new ApplicationTrackingHistory;
                     $applicationTrackingHistory->id_tracking_history = $trakingHistorysid;
@@ -121,89 +122,89 @@ class ApplicationTrackingHistoryController extends Controller
                     $applicationTrackingHistory->end_time = date('Y-m-d H:i:s',strtotime('+'.$duration.' second',strtotime($datetime)));
                     $applicationTrackingHistory->duration = $duration;
                     $applicationTrackingHistory->save();
-                    echo "menambah app traking history 1";
+                    // echo "menambah app traking history 1";
                 }
             }
             else {
-                echo "\tapp tidak ada";
+                // echo "\tapp tidak ada";
             }
         }
+      return $this->updateDailyTracking();
+  }
+  public function updateDailyTracking()
+  {
+      $todayDate = date('Y-m-d');
+      // echo $todayDate;
+      $dailyTrackingReportCount = DailyTrackingReport::where('id_user',Auth::guard('api')->id())
+                              ->whereDate('created_at',$todayDate)->count();
+      // echo $dailyTrackingReportCount;
+        if($dailyTrackingReportCount==0){
+                $dailyTrackingReport = new DailyTrackingReport;
+                $dailyTrackingReport->id_user = Auth::guard('api')->id();
+                $dailyTrackingReport->productive_value = 0;
+                $dailyTrackingReport->netral_value = 0;
+                $dailyTrackingReport->not_productive_value = 0;
+                $dailyTrackingReport->save();
+        }
+        // if($dailyTrackingReportCount>0){
+            $trakingHistorysCount = TrackingHistory::where('id_user',Auth::guard('api')->id())
+                                    ->whereDate('created_at',$todayDate)->count();
+            // echo $trakingHistorysCount;
 
-      //   foreach ($dt as $key) {
-      //       echo count($dt);
-      //       echo "\n".$key['name'];
-      //       $appCount = Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->count();
-      //       //ada app nya app enggak
-      //       if($appCount > 0){
-      //           // echo "ada ";
-      //           $appId = Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->first();
-      //           // echo "appID : ".$appId['id'];
-      //           $idUser = Auth::guard('api')->id();
-      //           $todayDate = date('Y-m-d');
-      //           $trakingHistorysCount = TrackingHistory::where('id_user',$idUser)
-      //                            ->whereDate('created_at',$todayDate)->count();
-      //           //ada data track hari ini apa enggak
-      //           if($trakingHistorysCount>0){
-      //               $trakingHistorys = TrackingHistory::where('id_user',$idUser)
-      //                                 ->whereDate('created_at',$todayDate)->get();
-      //                //echo $trakingHistoryIds[0]['id'];
-      //                   $i=0;
-      //                   for ($i = 0; $i < count($dt); $i++ ) {
-      //                       //echo "wher app id".$appId."dan id traking histoy".$trakingHistoryId['id'];
-      //                       $applicationTrackingHistoryCount =
-      //                       ApplicationTrackingHistory::where('id_application',$appId['id'])
-      //                         ->where('id_tracking_history',$trakingHistorys[$i]['id'])->count();
-      //
-      //                       if($applicationTrackingHistoryCount>0){
-      //                           // echo "TrackingHistoryID : ".$trakingHistoryId['id'];
-      //                           $applicationTrackingHistory =
-      //                           ApplicationTrackingHistory::where('id_application',$appId['id'])
-      //                                       ->where('id_tracking_history',$trakingHistorys[$i]['id'])->first();
-      //                           //echo "ApplicationTrackingHistoryID : ".$applicationTrackingHistory['id']."---\n";
-      //                           $trakingHistorys[$i]->duration = $trakingHistory->duration+$duration;
-      //                           $trakingHistorys[$i]->save();
-      //                           echo "menambah durasi".$trakingHistorys[$i]['id'];
-      //                           // break;
-      //                       }
-      //                       else{
-      //                           $trakingHistory = new TrackingHistory;
-      //                           $trakingHistory->id_user = Auth::guard('api')->id();
-      //                           $trakingHistory->start_time = "2019-11-13 00:00:00";
-      //                           $trakingHistory->end_time = "2019-11-13 00:00:00";
-      //                           $trakingHistory->duration = $duration;
-      //                           $trakingHistory->save();
-      //
-      //                           $applicationTrackingHistory = new ApplicationTrackingHistory;
-      //                           $applicationTrackingHistory->id_tracking_history = $trakingHistory->id;
-      //                           // $trakingHistory->id_tracking_history = 3;
-      //                           $applicationTrackingHistory->id_application =
-      //                           Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->get('id')->first()->id;
-      //                           $applicationTrackingHistory->save();
-      //                           echo "menambah record traking history baru";
-      //                           // break;
-      //                       }
-      //                   }
-      //
-      //           }
-      //           else{
-      //               $trakingHistory = new TrackingHistory;
-      //               $trakingHistory->id_user = Auth::guard('api')->id();
-      //               $trakingHistory->save();
-      //
-      //               $applicationTrackingHistory = new ApplicationTrackingHistory;
-      //               $applicationTrackingHistory->id_tracking_history = $trakingHistory->id;
-      //               $applicationTrackingHistory->id_application =
-      //               Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->get('id')->first()->id;
-      //               $applicationTrackingHistory->start_time = "2019-11-13 00:00:00";
-      //               $applicationTrackingHistory->end_time = "2019-11-13 00:00:00";
-      //               $applicationTrackingHistory->duration = $duration;
-      //               $applicationTrackingHistory->save();
-      //               echo "menambah record traking history";
-      //           }
-      //      }
-      //      else {
-      //          echo "gak ada";
-      //      }
-      // }
+            $trakingHistorysid = 0;
+            $trakingHistory = new TrackingHistory;
+
+            if($trakingHistorysCount==0){
+                $trakingHistory->id_user = Auth::guard('api')->id();
+                $trakingHistory->save();
+                $trakingHistorysid = $trakingHistory->id;
+            } else {
+                $trakingHistorysid = TrackingHistory::where('id_user',Auth::guard('api')->id())
+                                        ->whereDate('created_at',$todayDate)->first()->id;
+            }
+            // echo '\n-----------'.$trakingHistorysid;
+            $applicationTrackingHistory = ApplicationTrackingHistory::
+                where('id_tracking_history',$trakingHistorysid)->get();
+
+
+            $appArray= array();
+            $totalTimeProductive=0;
+            $totalTimeNetral=0;
+            $totalTimeNotProductive=0;
+            foreach ($applicationTrackingHistory as $key) {
+                // echo 'id'.$key->id_application."role";
+                $app = Application::where('id',$key->id_application)->first();
+                // echo $app->id_app_productivity_type;
+                // echo "duration".$key->duration;
+                if($app->id_app_productivity_type==1){
+                    // echo "prodtuctive";
+                    $totalTimeProductive+=$key->duration;
+                }else if($app->id_app_productivity_type==2){
+                    // echo "netral";
+                    $totalTimeNetral+=$key->duration;
+                }else{
+                    // echo "not productive";
+                    $totalTimeNotProductive+=$key->duration;
+                }
+            }
+            $prod = ($totalTimeProductive/($totalTimeProductive+$totalTimeNetral+$totalTimeNotProductive))*100;
+            $net = ($totalTimeNetral/($totalTimeProductive+$totalTimeNetral+$totalTimeNotProductive))*100;
+            $nonprod = ($totalTimeNotProductive/($totalTimeProductive+$totalTimeNetral+$totalTimeNotProductive))*100;
+
+            // echo "---prod".$prod;
+            // echo "---net".$net;
+            // echo "---non".$nonprod;
+            $dailyTrackingReport = DailyTrackingReport::where('id_user',Auth::guard('api')->id())
+                                    ->whereDate('created_at',$todayDate)->first();
+            $dailyTrackingReport->productive_value = $prod;
+            $dailyTrackingReport->netral_value = $net;
+            $dailyTrackingReport->not_productive_value = $nonprod;
+            $dailyTrackingReport->save();
+
+            return response()->json(['success'=>'true','message'=>'successfully updated daily traking report','data'=>$dailyTrackingReport],200);
+
+        // }
+        // else{
+        // }
   }
 }
