@@ -148,12 +148,35 @@ class TeamController extends Controller
           // return $userTeams;
           $memberArray= array();
           $i=0;
+          $j=0;
+          $k=0;
+          // for ($i=1; $i <5 ; $i++) {
+          //
+          // }
+          $memberArray['manager']=0;;
+          $memberArray['frontend'][0]="";
+          $memberArray['backend'][0]="";
+          $memberArray['uiux'][0]="";
           foreach ($userTeams as $member) {
               // echo $member;
-              $memberArray[$i]['user'] = User::where('id', $member->id_user)->get();
-              $memberArray[$i]['role'] = $member->id_role;
-              $i++;
+              //$memberArray[$i]['user'] = User::where('id', $member->id_user)->get();
+              //$memberArray[$i]['role'] = $member->id_role;
+              if($member->id_role==1){
+                  $memberArray['manager'] = User::where('id', $member->id_user)->first();
+              } else if($member->id_role==2){
+                  $memberArray['frontend'][$i] = User::where('id', $member->id_user)->first();
+                  $i++;
+              } else if($member->id_role==3){
+                  $memberArray['backend'][$j] = User::where('id', $member->id_user)->first();
+                  $j++;
+              } else {
+                  $memberArray['uiux'][$k] = User::where('id', $member->id_user)->first();
+                  $k++;
+              }
            }
+           $memberArray['count']['frontend'] = $i;
+           $memberArray['count']['backend'] = $j;
+           $memberArray['count']['uiux'] = $k;
           return response()->json(['success'=>'true','data'=>$memberArray],200);
       }
 
