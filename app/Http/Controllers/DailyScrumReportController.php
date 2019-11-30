@@ -156,6 +156,7 @@ class DailyScrumReportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
+            'date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 200);
