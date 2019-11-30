@@ -146,24 +146,24 @@ class DailyTrackingReportController extends Controller
                 $dailyTrackingReportDate = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->count();
                 if($dailyTrackingReportDate>0){
                     $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
-                    $data[$i]['value']['productive_value'] = $key['productive_value'];
-                    $data[$i]['value']['netral_value'] =  $key['netral_value'];
-                    $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
-                    $data[$i]['value']['date'] = $key['created_at'];
+                    $data[$i] = $key['productive_value'];
+                    // $data[$i]['value']['netral_value'] =  $key['netral_value'];
+                    // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
+                    // $data[$i]['value']['date'] = $key['created_at'];
                 }
                 else{
-                    $data[$i]['value']['productive_value'] = 0;
-                    $data[$i]['value']['netral_value'] = 0;
-                    $data[$i]['value']['not_productive_value'] =  0;
-                    $data[$i]['value']['date'] = $date;
+                    $data[$i] = 0;
+                    // $data[$i]['value']['netral_value'] = 0;
+                    // $data[$i]['value']['not_productive_value'] =  0;
+                    // $data[$i]['value']['date'] = $date;
                 }
             }
         }
         else{
-            $data[0]['value']['productive_value'] = 0;
-            $data[0]['value']['netral_value'] = 0;
-            $data[0]['value']['not_productive_value'] = 0;
-            $data[$i]['value']['date'] = $todayDate;
+            $data[0] = 0;
+            // $data[0]['value']['netral_value'] = 0;
+            // $data[0]['value']['not_productive_value'] = 0;
+            // $data[0]['value']['date'] = $todayDate;
         }
 
         return response()->json(['success'=>'true','data'=>$data],200);
