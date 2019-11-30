@@ -168,6 +168,41 @@ class DailyTrackingReportController extends Controller
 
         return response()->json(['success'=>'true','data'=>$data],200);
     }
+    public function historyPerTeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $todayDate = date('Y-m-d');
+        $from =  date('Y-m-d',strtotime('-6 days',strtotime($todayDate)));
+        $to = $todayDate;
+        $userTeamsCount = UserTeam::where('id_team', $request->id_team)->count();
+        $userTeams = UserTeam::where('id_team', $request->id_team)->get();
+        $chart=array();
+        $average=0;
+        $date=$from;
+        for ($i=0; $i < 7; $i++) {
+            $totalToday=0;
+            foreach ($userTeams as $key) {
+                $date = date('Y-m-d',strtotime('+'.$i.' days',strtotime($from)));
+                $dailyTrackingReportDate = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->count();
+                if($dailyTrackingReportDate>0){
+                    $key = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->first();
+                    $totalToday+= $key['productive_value'];
+                }
+            }
+            $totalToday = $totalToday/$userTeamsCount;
+            $average+=$totalToday;
+            $chart[$i]=$totalToday;
+        }
+        $average=$average/7;
+        // $averageTeam = $total/$userTeamsCount;
+        return response()->json(['success'=>'true','data'=>$chart,'average'=>$average],200);
+    }
     public function overalPerTeam(Request $request)
     {
         $validator = Validator::make($request->all(), [
