@@ -146,27 +146,62 @@ class DailyTrackingReportController extends Controller
                 $dailyTrackingReportDate = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->count();
                 if($dailyTrackingReportDate>0){
                     $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
-                    $data[$i]['value']['productive_value'] = $key['productive_value'];
-                    $data[$i]['value']['netral_value'] =  $key['netral_value'];
-                    $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
-                    $data[$i]['value']['date'] = $key['created_at'];
+                    $data[$i] = $key['productive_value'];
+                    // $data[$i]['value']['netral_value'] =  $key['netral_value'];
+                    // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
+                    // $data[$i]['value']['date'] = $key['created_at'];
                 }
                 else{
-                    $data[$i]['value']['productive_value'] = 0;
-                    $data[$i]['value']['netral_value'] = 0;
-                    $data[$i]['value']['not_productive_value'] =  0;
-                    $data[$i]['value']['date'] = $date;
+                    $data[$i] = 0;
+                    // $data[$i]['value']['netral_value'] = 0;
+                    // $data[$i]['value']['not_productive_value'] =  0;
+                    // $data[$i]['value']['date'] = $date;
                 }
             }
         }
         else{
-            $data[0]['value']['productive_value'] = 0;
-            $data[0]['value']['netral_value'] = 0;
-            $data[0]['value']['not_productive_value'] = 0;
-            $data[$i]['value']['date'] = $todayDate;
+            $data[0] = 0;
+            // $data[0]['value']['netral_value'] = 0;
+            // $data[0]['value']['not_productive_value'] = 0;
+            // $data[0]['value']['date'] = $todayDate;
         }
 
         return response()->json(['success'=>'true','data'=>$data],200);
+    }
+    public function historyPerTeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $todayDate = date('Y-m-d');
+        $from =  date('Y-m-d',strtotime('-6 days',strtotime($todayDate)));
+        $to = $todayDate;
+        $userTeamsCount = UserTeam::where('id_team', $request->id_team)->count();
+        $userTeams = UserTeam::where('id_team', $request->id_team)->get();
+        $chart=array();
+        $average=0;
+        $date=$from;
+        for ($i=0; $i < 7; $i++) {
+            $totalToday=0;
+            foreach ($userTeams as $key) {
+                $date = date('Y-m-d',strtotime('+'.$i.' days',strtotime($from)));
+                $dailyTrackingReportDate = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->count();
+                if($dailyTrackingReportDate>0){
+                    $key = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->first();
+                    $totalToday+= $key['productive_value'];
+                }
+            }
+            $totalToday = $totalToday/$userTeamsCount;
+            $average+=$totalToday;
+            $chart[$i]=$totalToday;
+        }
+        $average=$average/7;
+        // $averageTeam = $total/$userTeamsCount;
+        return response()->json(['success'=>'true','data'=>$chart,'average'=>$average],200);
     }
     public function overalPerTeam(Request $request)
     {
