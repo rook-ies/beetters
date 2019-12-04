@@ -90,11 +90,11 @@ class ApplicationTrackingHistoryController extends Controller
 
         foreach ($dt as $key) {
             // echo "\n".$key['name'];
-            $appCount = Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->count();
+            $appCount = Application::where('application_file_name', 'like', '%' . $key . '%')->count();
             //ada app nya app enggak
             if($appCount > 0){
                 // echo "ada ";
-                $appId = Application::where('application_file_name', 'like', '%' . $key['name'] . '%')->first()->id;
+                $appId = Application::where('application_file_name', 'like', '%' . $key . '%')->first()->id;
                 // echo "appID : ".$appId;
 
                 $applicationTrackingHistoryCount = ApplicationTrackingHistory::
