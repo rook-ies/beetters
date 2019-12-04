@@ -69,7 +69,7 @@ class ApplicationTrackingHistoryController extends Controller
   public function acceptRespones(Request $request)
   {
         $dt = $request->data;
-        $duration = 300;
+        $duration = 120;
         $todayDate = date('Y-m-d');
         $trakingHistorysCount = TrackingHistory::where('id_user',Auth::guard('api')->id())
                                 ->whereDate('created_at',$todayDate)->count();
