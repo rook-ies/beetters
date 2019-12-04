@@ -88,7 +88,7 @@ class ApplicationTrackingHistoryController extends Controller
         }
         // echo $trakingHistorysid;
 
-        foreach ($dt as $key) {
+        foreach ((array) $dt as $key) {
             // echo "\n".$key['name'];
             $appCount = Application::where('application_file_name', 'like', '%' . $key . '%')->count();
             //ada app nya app enggak
