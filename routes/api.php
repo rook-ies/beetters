@@ -21,6 +21,7 @@ Route::post('register', 'API\UserController@register');
 Route::get('test','API\UserController@testServer');
 Route::group(['middleware' => 'auth:api'], function(){
 
+    Route::post('insert','DailyTrackingReportController@insert');
     Route::post('logout', 'API\UserController@logout');
     Route::get('user', 'API\UserController@user');
 

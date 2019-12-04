@@ -24,6 +24,11 @@ class DailyTrackingReportController extends Controller
         return response()->json(['success'=>'true','data'=>$dailyTrackingReport],200);
     }
 
+    public function insert(Request $request)
+    {
+        return response()->json(['success'=>'true','data'=>$request->data],200);
+    }
+    
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
