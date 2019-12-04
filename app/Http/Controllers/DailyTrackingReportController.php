@@ -198,6 +198,77 @@ class DailyTrackingReportController extends Controller
 
         return response()->json(['success'=>'true','data'=>$data],200);
     }
+    public function overalPerUserTeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'date' => 'required',
+            'id_team'=>'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $userTeamIds = UserTeam::where('id_team',$request->id_team)->get();
+        $date = $request->date;
+        $uid=0;
+        foreach ($userTeamIds as $key) {
+            $dailyTrackingReportCount = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at',$date)->count();
+            if($dailyTrackingReportCount>0){
+                $dailyTrackingReport = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at',$date)->first();
+                $productiveValue=
+                $netralValue=0;
+                $notProductiveValue=0;
+                $pembagi=$dailyTrackingReportCount;
+                $data[$uid]['user']=User::where('id', $key->id_user)->first();
+                $data[$uid]['value'][0] = $dailyTrackingReport->productive_value;
+                $data[$uid]['value'][1] = $dailyTrackingReport->netral_value;
+                $data[$uid]['value'][2] = $dailyTrackingReport->not_productive_value;
+
+                $trakingHistorysid = TrackingHistory::where('id_user',$key->id_user)
+                                        ->whereDate('created_at',$date)->first()->id;
+                $gtt=0;
+                $applicationTrackingHistory = ApplicationTrackingHistory::
+                    where('id_tracking_history',$trakingHistorysid)->get();
+
+                $i=0;
+                $j=0;
+                $k=0;
+                foreach ($applicationTrackingHistory as $key) {
+                    $app = Application::where('id',$key->id_application)->first();
+                    $gtt+=$key->duration;
+                    if($app->id_app_productivity_type==1){
+                        $data[$uid]['app']['productive'][$i]['name'] = $app->name;
+                        $data[$uid]['app']['productive'][$i]['duration'] = $key->duration." second";
+                        $i++;
+                    }else if($app->id_app_productivity_type==2){
+                        $data[$uid]['app']['netral'][$j]['name'] = $app->name;
+                        $data[$uid]['app']['netral'][$j]['duration'] = $key->duration." second";
+                        $j++;
+                    }else{
+                        $data[$uid]['app']['not_productive'][$k]['name'] = $app->name;
+                        $data[$uid]['app']['not_productive'][$k]['duration'] = $key->duration." second";
+                        $k++;
+                    }
+                }
+                $data[$uid]['time_consumed'] = $gtt;
+            }
+            else{
+                $data[$uid]['value']['time_consumed'] = 0;
+                $data[$uid]['value']['productive_value'] = 0;
+                $data[$uid]['value']['netral_value'] = 0;
+                $data[$uid]['value']['not_productive_value'] = 0;
+                $data[$uid]['app']['productive'][0]['name'] = "nothing";
+                $data[$uid]['app']['productive'][0]['duration'] = "0 second";
+                $data[$uid]['app']['netral'][0]['name'] = "nothing";
+                $data[$uid]['app']['netral'][0]['duration'] = "0 second";
+                $data[$uid]['app']['not_productive'][0]['name'] = "nothing";
+                $data[$uid]['app']['not_productive'][0]['duration'] = "0 second";
+            }
+            $uid++;
+        }
+            return response()->json(['success'=>'true','data'=>$data],200);
+    }
+
     public function historyPerUser()
     {
         $todayDate = date('Y-m-d');
