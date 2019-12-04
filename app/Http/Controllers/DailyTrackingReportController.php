@@ -26,7 +26,7 @@ class DailyTrackingReportController extends Controller
 
     public function insert(Request $request)
     {
-        return response()->json(['success'=>'true','data'=>$request],200);
+        return response()->json(['success'=>'true','data'=>$request->data],200);
     }
     
     public function store(Request $request)
