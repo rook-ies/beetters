@@ -333,10 +333,23 @@ class DailyTrackingReportController extends Controller
                 $memberArray[$i]['value']['productive_value'] = $key->productive_value;
                 $memberArray[$i]['value']['netral_value'] = $key->netral_value;
                 $memberArray[$i]['value']['not_productive_value'] = $key->not_productive_value;
+
+                $trakingHistorysid = TrackingHistory::where('id_user',$member->id_user)
+                                    ->whereDate('created_at',$date)->first()->id;
+                $gtt=0;
+                $applicationTrackingHistory = ApplicationTrackingHistory::
+                    where('id_tracking_history',$trakingHistorysid)->get();
+
+                foreach ($applicationTrackingHistory as $key) {
+                    $app = Application::where('id',$key->id_application)->first();
+                    $gtt+=$key->duration;
+                }
+                $memberArray[$i]['time_consumed'] = $gtt;
             }else{
                 $memberArray[$i]['value']['productive_value'] = 0;
                 $memberArray[$i]['value']['netral_value'] = 0;
                 $memberArray[$i]['value']['not_productive_value'] = 0;
+                $memberArray[$i]['time_consumed'] = 0;
             }
             $i++;
          }
