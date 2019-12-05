@@ -28,7 +28,7 @@ class DailyTrackingReportController extends Controller
     {
         return response()->json(['success'=>'true','data'=>$request->data],200);
     }
-    
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -104,6 +104,13 @@ class DailyTrackingReportController extends Controller
             $i=0;
             $j=0;
             $k=0;
+
+            $data['app']['productive'][0]['name'] = "noting";
+            $data['app']['productive'][0]['duration'] = "0 second";
+            $data['app']['netral'][0]['name'] = "noting";
+            $data['app']['netral'][0]['duration'] = "0 second";
+            $data['app']['not_productive'][0]['name'] = "noting";
+            $data['app']['not_productive'][0]['duration'] = "0 second";
             foreach ($applicationTrackingHistory as $key) {
                 $app = Application::where('id',$key->id_application)->first();
                 $gtt+=$key->duration;
@@ -169,6 +176,13 @@ class DailyTrackingReportController extends Controller
             $i=0;
             $j=0;
             $k=0;
+
+            $data['app']['productive'][0]['name'] = "noting";
+            $data['app']['productive'][0]['duration'] = "0 second";
+            $data['app']['netral'][0]['name'] = "noting";
+            $data['app']['netral'][0]['duration'] = "0 second";
+            $data['app']['not_productive'][0]['name'] = "noting";
+            $data['app']['not_productive'][0]['duration'] = "0 second";
             foreach ($applicationTrackingHistory as $key) {
                 $app = Application::where('id',$key->id_application)->first();
                 $gtt+=$key->duration;
@@ -238,6 +252,12 @@ class DailyTrackingReportController extends Controller
                 $i=0;
                 $j=0;
                 $k=0;
+                $data[$uid]['app']['productive'][0]['name'] = "noting";
+                $data[$uid]['app']['productive'][0]['duration'] = "0 second";
+                $data[$uid]['app']['netral'][0]['name'] = "noting";
+                $data[$uid]['app']['netral'][0]['duration'] = "0 second";
+                $data[$uid]['app']['not_productive'][0]['name'] = "noting";
+                $data[$uid]['app']['not_productive'][0]['duration'] = "0 second";
                 foreach ($applicationTrackingHistory as $key) {
                     $app = Application::where('id',$key->id_application)->first();
                     $gtt+=$key->duration;
@@ -258,6 +278,7 @@ class DailyTrackingReportController extends Controller
                 $data[$uid]['time_consumed'] = $gtt;
             }
             else{
+                $data[$uid]['user']=User::where('id', $key->id_user)->first();
                 $data[$uid]['value']['time_consumed'] = 0;
                 $data[$uid]['value']['productive_value'] = 0;
                 $data[$uid]['value']['netral_value'] = 0;
