@@ -450,7 +450,7 @@ class DailyTrackingReportController extends Controller
             }
             $i++;
          }
-         function sortBySubkey(&$array, $subkey, $sortType = SORT_DESC) {
+         function sortBySubkey(&$array, $subkey, $sortType = SORT_ASC) {
             foreach ($array as $subarray) {
                 $keys[] = $subarray[$subkey];
             }
