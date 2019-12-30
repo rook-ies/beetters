@@ -165,6 +165,7 @@ class DailyScrumReportController extends Controller
         $date = date("Y-m-d", strtotime($originalDate));
         $result = DailyScrumReport::where('id_team', $request->id)
                                  ->whereDate('created_at', $date)
+                                 ->orderBy('created_at', 'desc')
                                 ->get();
         $daily=array();
         $i=0;

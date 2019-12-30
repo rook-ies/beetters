@@ -28,7 +28,7 @@ class DailyTrackingReportController extends Controller
     {
         return response()->json(['success'=>'true','data'=>$request->data],200);
     }
-    
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -104,6 +104,13 @@ class DailyTrackingReportController extends Controller
             $i=0;
             $j=0;
             $k=0;
+
+            $data['app']['productive'][0]['name'] = "noting";
+            $data['app']['productive'][0]['duration'] = "0 second";
+            $data['app']['netral'][0]['name'] = "noting";
+            $data['app']['netral'][0]['duration'] = "0 second";
+            $data['app']['not_productive'][0]['name'] = "noting";
+            $data['app']['not_productive'][0]['duration'] = "0 second";
             foreach ($applicationTrackingHistory as $key) {
                 $app = Application::where('id',$key->id_application)->first();
                 $gtt+=$key->duration;
@@ -169,6 +176,13 @@ class DailyTrackingReportController extends Controller
             $i=0;
             $j=0;
             $k=0;
+
+            $data['app']['productive'][0]['name'] = "noting";
+            $data['app']['productive'][0]['duration'] = "0 second";
+            $data['app']['netral'][0]['name'] = "noting";
+            $data['app']['netral'][0]['duration'] = "0 second";
+            $data['app']['not_productive'][0]['name'] = "noting";
+            $data['app']['not_productive'][0]['duration'] = "0 second";
             foreach ($applicationTrackingHistory as $key) {
                 $app = Application::where('id',$key->id_application)->first();
                 $gtt+=$key->duration;
@@ -238,6 +252,12 @@ class DailyTrackingReportController extends Controller
                 $i=0;
                 $j=0;
                 $k=0;
+                $data[$uid]['app']['productive'][0]['name'] = "noting";
+                $data[$uid]['app']['productive'][0]['duration'] = "0 second";
+                $data[$uid]['app']['netral'][0]['name'] = "noting";
+                $data[$uid]['app']['netral'][0]['duration'] = "0 second";
+                $data[$uid]['app']['not_productive'][0]['name'] = "noting";
+                $data[$uid]['app']['not_productive'][0]['duration'] = "0 second";
                 foreach ($applicationTrackingHistory as $key) {
                     $app = Application::where('id',$key->id_application)->first();
                     $gtt+=$key->duration;
@@ -258,6 +278,7 @@ class DailyTrackingReportController extends Controller
                 $data[$uid]['time_consumed'] = $gtt;
             }
             else{
+                $data[$uid]['user']=User::where('id', $key->id_user)->first();
                 $data[$uid]['value']['time_consumed'] = 0;
                 $data[$uid]['value']['productive_value'] = 0;
                 $data[$uid]['value']['netral_value'] = 0;
@@ -280,6 +301,7 @@ class DailyTrackingReportController extends Controller
         $from =  date('Y-m-d',strtotime('-6 days',strtotime($todayDate)));
         $to = $todayDate;
         $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereBetween('created_at', [$from, $to])->count();
+        $totalTime = 0;
         if($dailyTrackingReportCount>0){
             $date=$from;
             for ($i=0; $i < 7; $i++) {
@@ -288,12 +310,19 @@ class DailyTrackingReportController extends Controller
                 if($dailyTrackingReportDate>0){
                     $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
                     $data[$i] = $key['productive_value'];
+                    $dailyTrackingReportId = $key['id'];
+                    $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
+                    // echo $duration."-";
+                    foreach ($duration as $durationItem) {
+                        $totalTime = $totalTime + $durationItem['duration'];
+                    }
                     // $data[$i]['value']['netral_value'] =  $key['netral_value'];
                     // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
                     // $data[$i]['value']['date'] = $key['created_at'];
                 }
                 else{
-                    $data[$i] = 0;
+                     $data[$i] = 0;
+                    //echo "0-";
                     // $data[$i]['value']['netral_value'] = 0;
                     // $data[$i]['value']['not_productive_value'] =  0;
                     // $data[$i]['value']['date'] = $date;
@@ -307,7 +336,7 @@ class DailyTrackingReportController extends Controller
             // $data[0]['value']['date'] = $todayDate;
         }
 
-        return response()->json(['success'=>'true','data'=>$data],200);
+        return response()->json(['success'=>'true','data'=>$data,'total_time'=>$totalTime],200);
     }
     public function historyPerTeam(Request $request)
     {
@@ -326,6 +355,7 @@ class DailyTrackingReportController extends Controller
         $chart=array();
         $average=0;
         $date=$from;
+        $totalTime =0;
         for ($i=0; $i < 7; $i++) {
             $totalToday=0;
             foreach ($userTeams as $key) {
@@ -334,6 +364,13 @@ class DailyTrackingReportController extends Controller
                 if($dailyTrackingReportDate>0){
                     $key = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->first();
                     $totalToday+= $key['productive_value'];
+                    $dailyTrackingReportId = $key['id'];
+                    //echo "\nid trakhis".$dailyTrackingReportId."->";
+                    $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
+                    foreach ($duration as $durationItem) {
+                        //echo "-------<<id".$durationItem['id'].">>"."<<dur".$durationItem['duration'].">>\n";
+                        $totalTime = $totalTime + $durationItem['duration'];
+                    }
                 }
             }
             $totalToday = $totalToday/$userTeamsCount;
@@ -342,7 +379,7 @@ class DailyTrackingReportController extends Controller
         }
         $average=$average/7;
         // $averageTeam = $total/$userTeamsCount;
-        return response()->json(['success'=>'true','data'=>$chart,'average'=>$average],200);
+        return response()->json(['success'=>'true','data'=>$chart,'average'=>$average,'total_time'=>$totalTime],200);
     }
     public function overalPerTeam(Request $request)
     {
@@ -429,7 +466,7 @@ class DailyTrackingReportController extends Controller
             }
             $i++;
          }
-         function sortBySubkey(&$array, $subkey, $sortType = SORT_DESC) {
+         function sortBySubkey(&$array, $subkey, $sortType = SORT_ASC) {
             foreach ($array as $subarray) {
                 $keys[] = $subarray[$subkey];
             }
