@@ -311,9 +311,11 @@ class DailyTrackingReportController extends Controller
                     $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
                     $data[$i] = $key['productive_value'];
                     $dailyTrackingReportId = $key['id'];
-                    $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->first()->duration;
+                    $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
                     // echo $duration."-";
-                    $totalTime = $totalTime + $duration;
+                    foreach ($duration as $durationItem) {
+                        $totalTime = $totalTime + $durationItem['duration'];
+                    }
                     // $data[$i]['value']['netral_value'] =  $key['netral_value'];
                     // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
                     // $data[$i]['value']['date'] = $key['created_at'];
@@ -353,6 +355,7 @@ class DailyTrackingReportController extends Controller
         $chart=array();
         $average=0;
         $date=$from;
+        $totalTime =0;
         for ($i=0; $i < 7; $i++) {
             $totalToday=0;
             foreach ($userTeams as $key) {
@@ -361,6 +364,13 @@ class DailyTrackingReportController extends Controller
                 if($dailyTrackingReportDate>0){
                     $key = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->first();
                     $totalToday+= $key['productive_value'];
+                    $dailyTrackingReportId = $key['id'];
+                    //echo "\nid trakhis".$dailyTrackingReportId."->";
+                    $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
+                    foreach ($duration as $durationItem) {
+                        //echo "-------<<id".$durationItem['id'].">>"."<<dur".$durationItem['duration'].">>\n";
+                        $totalTime = $totalTime + $durationItem['duration'];
+                    }
                 }
             }
             $totalToday = $totalToday/$userTeamsCount;
@@ -369,7 +379,7 @@ class DailyTrackingReportController extends Controller
         }
         $average=$average/7;
         // $averageTeam = $total/$userTeamsCount;
-        return response()->json(['success'=>'true','data'=>$chart,'average'=>$average],200);
+        return response()->json(['success'=>'true','data'=>$chart,'average'=>$average,'total_time'=>$totalTime],200);
     }
     public function overalPerTeam(Request $request)
     {
