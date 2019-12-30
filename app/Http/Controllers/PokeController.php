@@ -24,7 +24,6 @@ class PokeController extends Controller
   {
       //$poke = Poke::create($request->all());
       $validator = Validator::make($request->all(), [
-          'content' => 'required',
           'id_team' => 'required',
           'id_user'=>'required',
       ]);
