@@ -301,6 +301,7 @@ class DailyTrackingReportController extends Controller
         $from =  date('Y-m-d',strtotime('-6 days',strtotime($todayDate)));
         $to = $todayDate;
         $dailyTrackingReportCount = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereBetween('created_at', [$from, $to])->count();
+        $totalTime = 0;
         if($dailyTrackingReportCount>0){
             $date=$from;
             for ($i=0; $i < 7; $i++) {
@@ -309,12 +310,17 @@ class DailyTrackingReportController extends Controller
                 if($dailyTrackingReportDate>0){
                     $key = DailyTrackingReport::where('id_user', Auth::guard('api')->id())->whereDate('created_at', $date)->first();
                     $data[$i] = $key['productive_value'];
+                    $dailyTrackingReportId = $key['id'];
+                    $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->first()->duration;
+                    // echo $duration."-";
+                    $totalTime = $totalTime + $duration;
                     // $data[$i]['value']['netral_value'] =  $key['netral_value'];
                     // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
                     // $data[$i]['value']['date'] = $key['created_at'];
                 }
                 else{
-                    $data[$i] = 0;
+                     $data[$i] = 0;
+                    //echo "0-";
                     // $data[$i]['value']['netral_value'] = 0;
                     // $data[$i]['value']['not_productive_value'] =  0;
                     // $data[$i]['value']['date'] = $date;
@@ -328,7 +334,7 @@ class DailyTrackingReportController extends Controller
             // $data[0]['value']['date'] = $todayDate;
         }
 
-        return response()->json(['success'=>'true','data'=>$data],200);
+        return response()->json(['success'=>'true','data'=>$data,'total_time'=>$totalTime],200);
     }
     public function historyPerTeam(Request $request)
     {
