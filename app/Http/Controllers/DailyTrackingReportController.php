@@ -275,7 +275,7 @@ class DailyTrackingReportController extends Controller
                         $k++;
                     }
                 }
-                $data[$uid]['time_consumed'] = $gtt;
+                $data[$uid]['time_consumed'] = $gtt/3600;
             }
             else{
                 $data[$uid]['user']=User::where('id', $key->id_user)->first();
@@ -487,6 +487,43 @@ class DailyTrackingReportController extends Controller
         foreach ($tracking as $key) {
             $totalReward = $totalReward + $key['productive_value'];
         }
-        echo $totalReward;
+        return response()->json(['success'=>'true','data'=>$totalReward],200);
+    }
+    public function rewardTablePerTeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_team' => 'required',
+            'date' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 200);
+        }
+        $userTeams = UserTeam::where('id_team',$request->id_team)->get();
+        $timestamp = strtotime($request->date);
+        $month = date('m', $timestamp);
+        $i=0;
+        $grandTotal = 0;
+        $dataReward= array();
+        foreach ($userTeams as $key) {
+            $idUser = $key['id_user'];
+            $dataReward[$i]['user'] = User::where('id',$idUser)->first()->name;
+            $tracking = DailyTrackingReport::where('id_user',$idUser)->whereMonth('created_at',$month)->get();
+            $totalReward = 0;
+            foreach ($tracking as $trackingKey) {
+                $totalReward = $totalReward + $trackingKey['productive_value'];
+            }
+            $dataReward[$i]['reward'] = $totalReward;
+            $grandTotal = $grandTotal = $totalReward;
+            $tracking = DailyTrackingReport::where('id_user',$idUser)->whereDate('created_at',$request->date)->get();
+            $totalReward = 0;
+            foreach ($tracking as $trackingKey) {
+                $totalReward = $totalReward + $trackingKey['productive_value'];
+            }
+            $dataReward[$i]['current_reward'] = $totalReward;
+            $dataReward[$i]['date'] = $request->date;
+            $i++;
+        }
+        return response()->json(['success'=>'true','data'=>$dataReward,'total'=>$grandTotal],200);
+
     }
 }
