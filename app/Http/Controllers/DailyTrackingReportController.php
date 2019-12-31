@@ -478,4 +478,15 @@ class DailyTrackingReportController extends Controller
         // echo $grandTotal;
         return response()->json(['success'=>'true','data'=>$memberArray],200);
     }
+    public function rewardPerUser()
+    {
+        $month = date('m');
+        $idUser = Auth::guard('api')->id();
+        $tracking = DailyTrackingReport::where('id_user',$idUser)->whereMonth('created_at',$month)->get();
+        $totalReward = 0;
+        foreach ($tracking as $key) {
+            $totalReward = $totalReward + $key['productive_value'];
+        }
+        echo $totalReward;
+    }
 }

@@ -118,4 +118,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('daily-tracking-report/history-per-team', 'DailyTrackingReportController@historyPerTeam');
     //Route::post('daily-tracking-report/overal-per-team', 'DailyTrackingReportController@overalPerTeam');
     Route::post('daily-tracking-report/overal-per-member-team', 'DailyTrackingReportController@overalPerMemberTeam');
+    Route::post('daily-tracking-report/reward-per-user', 'DailyTrackingReportController@rewardPerUser');
 });
