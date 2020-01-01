@@ -288,7 +288,7 @@ class DailyTrackingReportController extends Controller
                 $data[$uid]['app']['netral'][0]['duration'] = "0 second";
                 $data[$uid]['app']['not_productive'][0]['name'] = "nothing";
                 $data[$uid]['app']['not_productive'][0]['duration'] = "0 second";
-                $data[$uid]['time_consumed'] = $grandTotal/3600;
+                $data[$uid]['time_consumed'] = 0;
             }
             $uid++;
         }
