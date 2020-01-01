@@ -279,16 +279,16 @@ class DailyTrackingReportController extends Controller
             }
             else{
                 $data[$uid]['user']=User::where('id', $key->id_user)->first();
-                $data[$uid]['value']['time_consumed'] = 0;
-                $data[$uid]['value']['productive_value'] = 0;
-                $data[$uid]['value']['netral_value'] = 0;
-                $data[$uid]['value']['not_productive_value'] = 0;
+                $data[$uid]['value'][0] = 0;
+                $data[$uid]['value'][1] = 0;
+                $data[$uid]['value'][2] = 0;
                 $data[$uid]['app']['productive'][0]['name'] = "nothing";
                 $data[$uid]['app']['productive'][0]['duration'] = "0 second";
                 $data[$uid]['app']['netral'][0]['name'] = "nothing";
                 $data[$uid]['app']['netral'][0]['duration'] = "0 second";
                 $data[$uid]['app']['not_productive'][0]['name'] = "nothing";
                 $data[$uid]['app']['not_productive'][0]['duration'] = "0 second";
+                $data[$uid]['time_consumed'] = 0;
             }
             $uid++;
         }
