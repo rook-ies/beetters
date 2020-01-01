@@ -10,10 +10,6 @@ use App\team;
 use App\User;
 class PokeController extends Controller
 {
-  // public function index()
-  // {
-  //     return response()->json(['success'=>'true','data'=>Poke::all()],201);
-  // }
 
   public function show(Poke $poke)
   {
@@ -22,7 +18,6 @@ class PokeController extends Controller
 
   public function store(Request $request)
   {
-      //$poke = Poke::create($request->all());
       $validator = Validator::make($request->all(), [
           'id_team' => 'required',
           'id_user'=>'required',
@@ -45,26 +40,4 @@ class PokeController extends Controller
       return response()->json(['success'=>'true','data'=>$poke],201);
   }
 
-  // public function update(Request $request, Poke $poke)
-  // {
-  //     $validator = Validator::make($request->all(), [
-  //         'content' => 'required',
-  //         'id_team' => 'required',
-  //         'id_user'=>'required',
-  //     ]);
-  //
-  //     if ($validator->fails()) {
-  //         return response()->json(['error'=>$validator->errors()], 200);
-  //     }
-  //     $poke->update($request->all());
-  //
-  //     return response()->json($poke, 200);
-  // }
-
-  // public function delete(Poke $poke)
-  // {
-  //     $poke->delete();
-  //
-  //     return response()->json(null, 204);
-  // }
 }

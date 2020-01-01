@@ -17,8 +17,6 @@ class UserController extends Controller
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $token =  $user->createToken('nApp')->accessToken;
-            //return Auth::guard('api')->id();
-            //return response()->json(['success' => $success], $this->successStatus);
             return response()->json(['token'=>$token]);
         }
         else{
@@ -55,9 +53,5 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    public function testServer()
-    {
-        return "berhasil konek ke server api";
-    }
 
 }

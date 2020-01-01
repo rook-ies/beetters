@@ -14,66 +14,7 @@ use App\UserTeam;
 use App\User;
 class DailyTrackingReportController extends Controller
 {
-    public function index()
-    {
-        return response()->json(['success'=>'true','data'=>DailyTrackingReport::all()],200);
-    }
 
-    public function show(DailyTrackingReport $dailyTrackingReport)
-    {
-        return response()->json(['success'=>'true','data'=>$dailyTrackingReport],200);
-    }
-
-    public function insert(Request $request)
-    {
-        return response()->json(['success'=>'true','data'=>$request->data],200);
-    }
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'productive_value' => 'required',
-            'netral_value' => 'required',
-            'not_productive_value' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 200);
-        }
-
-        $dailyTrackingReport = new DailyTrackingReport;
-        $dailyTrackingReport->id_user = Auth::guard('api')->id();
-        $dailyTrackingReport->productive_value = $request->productive_value;
-        $dailyTrackingReport->netral_value = $request->netral_value;
-        $dailyTrackingReport->not_productive_value = $request->not_productive_value;
-        $dailyTrackingReport->save();
-
-        return response()->json(['success'=>'true','data'=>$dailyTrackingReport],201);
-    }
-
-    public function update(Request $request, DailyTrackingReport $dailyTrackingReport)
-    {
-        $validator = Validator::make($request->all(), [
-            'productive_value' => 'required',
-            'netral_value' => 'required',
-            'not_productive_value' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 200);
-        }
-
-        $dailyTrackingReport->update($request->all());
-
-        return response()->json(['success'=>'true','data'=>$dailyTrackingReport],200);
-    }
-
-    public function delete(DailyTrackingReport $dailyTrackingReport)
-    {
-        $dailyTrackingReport->delete();
-
-        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
-    }
     public function overalPerUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -131,10 +72,10 @@ class DailyTrackingReportController extends Controller
             $data['time_consumed'] = $grandTotal;
         }
         else{
-            $data['value']['time_consumed'] = 0;
-            $data['value']['productive_value'] = 0;
-            $data['value']['netral_value'] = 0;
-            $data['value']['not_productive_value'] = 0;
+            $data['time_consumed'] = 0;
+            $data['value'][0] = 0;
+            $data['value'][1] = 0;
+            $data['value'][2] = 0;
             $data['app']['productive'][0]['name'] = "nothing";
             $data['app']['productive'][0]['duration'] = "0 second";
             $data['app']['netral'][0]['name'] = "nothing";
@@ -203,10 +144,10 @@ class DailyTrackingReportController extends Controller
             $data['time_consumed'] = $grandTotal;
         }
         else{
-            $data['value']['time_consumed'] = 0;
-            $data['value']['productive_value'] = 0;
-            $data['value']['netral_value'] = 0;
-            $data['value']['not_productive_value'] = 0;
+            $data['time_consumed'] = 0;
+            $data['value'][0] = 0;
+            $data['value'][1] = 0;
+            $data['value'][2] = 0;
             $data['app']['productive'][0]['name'] = "nothing";
             $data['app']['productive'][0]['duration'] = "0 second";
             $data['app']['netral'][0]['name'] = "nothing";
@@ -312,28 +253,17 @@ class DailyTrackingReportController extends Controller
                     $data[$i] = $key['productive_value'];
                     $dailyTrackingReportId = $key['id'];
                     $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
-                    // echo $duration."-";
                     foreach ($duration as $durationItem) {
                         $totalTime = $totalTime + $durationItem['duration'];
                     }
-                    // $data[$i]['value']['netral_value'] =  $key['netral_value'];
-                    // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
-                    // $data[$i]['value']['date'] = $key['created_at'];
                 }
                 else{
                      $data[$i] = 0;
-                    //echo "0-";
-                    // $data[$i]['value']['netral_value'] = 0;
-                    // $data[$i]['value']['not_productive_value'] =  0;
-                    // $data[$i]['value']['date'] = $date;
                 }
             }
         }
         else{
             $data[0] = 0;
-            // $data[0]['value']['netral_value'] = 0;
-            // $data[0]['value']['not_productive_value'] = 0;
-            // $data[0]['value']['date'] = $todayDate;
         }
 
         return response()->json(['success'=>'true','data'=>$data,'total_time'=>$totalTime],200);
@@ -365,10 +295,8 @@ class DailyTrackingReportController extends Controller
                     $key = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->first();
                     $totalToday+= $key['productive_value'];
                     $dailyTrackingReportId = $key['id'];
-                    //echo "\nid trakhis".$dailyTrackingReportId."->";
                     $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
                     foreach ($duration as $durationItem) {
-                        //echo "-------<<id".$durationItem['id'].">>"."<<dur".$durationItem['duration'].">>\n";
                         $totalTime = $totalTime + $durationItem['duration'];
                     }
                 }
@@ -378,7 +306,6 @@ class DailyTrackingReportController extends Controller
             $chart[$i]=$totalToday;
         }
         $average=$average/7;
-        // $averageTeam = $total/$userTeamsCount;
         return response()->json(['success'=>'true','data'=>$chart,'average'=>$average,'total_time'=>$totalTime],200);
     }
     public function overalPerTeam(Request $request)
@@ -474,8 +401,6 @@ class DailyTrackingReportController extends Controller
         }
         $keys = "value";
         sortBySubkey($memberArray, $keys);
-         //arsort($memberArray);
-        // echo $grandTotal;
         return response()->json(['success'=>'true','data'=>$memberArray],200);
     }
     public function rewardPerUser()
