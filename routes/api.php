@@ -56,11 +56,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('application-role/{applicationRole}', 'ApplicationRoleController@update');
     Route::delete('application-role/{ApplicationRole}', 'ApplicationRoleController@delete');
 
-    Route::get('obstacle', 'ObstacleController@index');
-    Route::get('obstacle/{obstacle}', 'ObstacleController@show');
-    Route::post('obstacle', 'ObstacleController@store');
-    Route::put('obstacle/{obstacle}', 'ObstacleController@update');
-    Route::delete('obstacle/{obstacle}', 'ObstacleController@delete');
+    // Route::get('obstacle', 'ObstacleController@index');
+    // Route::get('obstacle/{obstacle}', 'ObstacleController@show');
+    // Route::post('obstacle', 'ObstacleController@store');
+    // Route::put('obstacle/{obstacle}', 'ObstacleController@update');
+    // Route::delete('obstacle/{obstacle}', 'ObstacleController@delete');
 
     Route::get('daily-scrum-report', 'DailyScrumReportController@index');
     Route::get('daily-scrum-report/{dailyScrumReport}', 'DailyScrumReportController@show');
