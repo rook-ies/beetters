@@ -513,7 +513,7 @@ class DailyTrackingReportController extends Controller
                 $totalReward = $totalReward + $trackingKey['productive_value'];
             }
             $dataReward[$i]['reward'] = $totalReward;
-            $grandTotal = $grandTotal = $totalReward;
+            $grandTotal = $grandTotal + $totalReward;
             $tracking = DailyTrackingReport::where('id_user',$idUser)->whereDate('created_at',$request->date)->get();
             $totalReward = 0;
             foreach ($tracking as $trackingKey) {
