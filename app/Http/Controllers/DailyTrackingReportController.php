@@ -97,7 +97,7 @@ class DailyTrackingReportController extends Controller
 
             $trakingHistorysid = TrackingHistory::where('id_user',Auth::guard('api')->id())
                                     ->whereDate('created_at',$date)->first()->id;
-            $gtt=0;
+            $grandTotal=0;
             $applicationTrackingHistory = ApplicationTrackingHistory::
                 where('id_tracking_history',$trakingHistorysid)->get();
 
@@ -113,7 +113,7 @@ class DailyTrackingReportController extends Controller
             $data['app']['not_productive'][0]['duration'] = "0 second";
             foreach ($applicationTrackingHistory as $key) {
                 $app = Application::where('id',$key->id_application)->first();
-                $gtt+=$key->duration;
+                $grandTotal+=$key->duration;
                 if($app->id_app_productivity_type==1){
                     $data['app']['productive'][$i]['name'] = $app->name;
                     $data['app']['productive'][$i]['duration'] = $key->duration." second";
@@ -128,7 +128,7 @@ class DailyTrackingReportController extends Controller
                     $k++;
                 }
             }
-            $data['time_consumed'] = $gtt;
+            $data['time_consumed'] = $grandTotal;
         }
         else{
             $data['value']['time_consumed'] = 0;
@@ -169,7 +169,7 @@ class DailyTrackingReportController extends Controller
 
             $trakingHistorysid = TrackingHistory::where('id_user',$request->id_user)
                                     ->whereDate('created_at',$date)->first()->id;
-            $gtt=0;
+            $grandTotal=0;
             $applicationTrackingHistory = ApplicationTrackingHistory::
                 where('id_tracking_history',$trakingHistorysid)->get();
 
@@ -185,7 +185,7 @@ class DailyTrackingReportController extends Controller
             $data['app']['not_productive'][0]['duration'] = "0 second";
             foreach ($applicationTrackingHistory as $key) {
                 $app = Application::where('id',$key->id_application)->first();
-                $gtt+=$key->duration;
+                $grandTotal+=$key->duration;
                 if($app->id_app_productivity_type==1){
                     $data['app']['productive'][$i]['name'] = $app->name;
                     $data['app']['productive'][$i]['duration'] = $key->duration." second";
@@ -200,7 +200,7 @@ class DailyTrackingReportController extends Controller
                     $k++;
                 }
             }
-            $data['time_consumed'] = $gtt;
+            $data['time_consumed'] = $grandTotal;
         }
         else{
             $data['value']['time_consumed'] = 0;
@@ -245,7 +245,7 @@ class DailyTrackingReportController extends Controller
 
                 $trakingHistorysid = TrackingHistory::where('id_user',$key->id_user)
                                         ->whereDate('created_at',$date)->first()->id;
-                $gtt=0;
+                $grandTotal=0;
                 $applicationTrackingHistory = ApplicationTrackingHistory::
                     where('id_tracking_history',$trakingHistorysid)->get();
 
@@ -260,7 +260,7 @@ class DailyTrackingReportController extends Controller
                 $data[$uid]['app']['not_productive'][0]['duration'] = "0 second";
                 foreach ($applicationTrackingHistory as $key) {
                     $app = Application::where('id',$key->id_application)->first();
-                    $gtt+=$key->duration;
+                    $grandTotal+=$key->duration;
                     if($app->id_app_productivity_type==1){
                         $data[$uid]['app']['productive'][$i]['name'] = $app->name;
                         $data[$uid]['app']['productive'][$i]['duration'] = $key->duration." second";
@@ -275,7 +275,7 @@ class DailyTrackingReportController extends Controller
                         $k++;
                     }
                 }
-                $data[$uid]['time_consumed'] = $gtt/3600;
+                $data[$uid]['time_consumed'] = $grandTotal/3600;
             }
             else{
                 $data[$uid]['user']=User::where('id', $key->id_user)->first();
@@ -449,15 +449,15 @@ class DailyTrackingReportController extends Controller
 
                 $trakingHistorysid = TrackingHistory::where('id_user',$member->id_user)
                                     ->whereDate('created_at',$date)->first()->id;
-                $gtt=0;
+                $grandTotal=0;
                 $applicationTrackingHistory = ApplicationTrackingHistory::
                     where('id_tracking_history',$trakingHistorysid)->get();
 
                 foreach ($applicationTrackingHistory as $key) {
                     $app = Application::where('id',$key->id_application)->first();
-                    $gtt+=$key->duration;
+                    $grandTotal+=$key->duration;
                 }
-                $memberArray[$i]['time_consumed'] = $gtt;
+                $memberArray[$i]['time_consumed'] = $grandTotal/3600;
             }else{
                 $memberArray[$i]['value']['productive_value'] = 0;
                 $memberArray[$i]['value']['netral_value'] = 0;
@@ -513,7 +513,7 @@ class DailyTrackingReportController extends Controller
                 $totalReward = $totalReward + $trackingKey['productive_value'];
             }
             $dataReward[$i]['reward'] = $totalReward;
-            $grandTotal = $grandTotal = $totalReward;
+            $grandTotal = $grandTotal + $totalReward;
             $tracking = DailyTrackingReport::where('id_user',$idUser)->whereDate('created_at',$request->date)->get();
             $totalReward = 0;
             foreach ($tracking as $trackingKey) {

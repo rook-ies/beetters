@@ -19,7 +19,6 @@ class RoleController extends Controller
 
   public function store(Request $request)
   {
-      //$role = Role::create($request->all());
       $validator = Validator::make($request->all(), [
           'role_type' => 'required',
       ]);
@@ -28,9 +27,7 @@ class RoleController extends Controller
           return response()->json(['error'=>$validator->errors()], 200);
       }
 
-      $role = new Role;
-      $role->role_type = $request->role_type;
-      $role->save();
+      $role = Role::create($request->all());
       return response()->json($role, 201);
   }
 
