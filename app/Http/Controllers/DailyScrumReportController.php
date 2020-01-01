@@ -14,15 +14,15 @@ use App\User;
 
 class DailyScrumReportController extends Controller
 {
-    public function index()
-    {
-        return response()->json(['success'=>'true','data'=>DailyScrumReport::all()],200);
-    }
-
-    public function show(DailyScrumReport $dailyScrumReport)
-    {
-        return response()->json(['success'=>'true','data'=>$dailyScrumReport],200);
-    }
+    // public function index()
+    // {
+    //     return response()->json(['success'=>'true','data'=>DailyScrumReport::all()],200);
+    // }
+    //
+    // public function show(DailyScrumReport $dailyScrumReport)
+    // {
+    //     return response()->json(['success'=>'true','data'=>$dailyScrumReport],200);
+    // }
 
     public function store(Request $request)
     {
@@ -44,25 +44,12 @@ class DailyScrumReportController extends Controller
         $dailyScrumReport->next_24_hour_activities = $request->next_24_hour_activities;
         $dailyScrumReport->save();
 
-        //$obstacles = $request->obstacles;
 
-        // foreach ($obstacles as $obstacle) {
-            // $validatorObstacle = Validator::make($request->all(), [
-            //     'content' => 'required',
-            // ]);
-            //
-            // if ($validatorObstacle->fails()) {
-            //     return response()->json(['error'=>$validatorObstacle->errors()], 200);
-            // }
+        $obstacleTable = new Obstacle;
+        $obstacleTable->id_daily_scrum_report = $dailyScrumReport->id;
+        $obstacleTable->content = $request->obstacle;
 
-            $obstacleTable = new Obstacle;
-            // $obstacleTable->id_daily_scrum_report = 7;
-            $obstacleTable->id_daily_scrum_report = $dailyScrumReport->id;
-            // $obstacleTable->content = $obstacle['content'];
-            $obstacleTable->content = $request->obstacle;
-
-            $obstacleTable->save();
-        // }
+        $obstacleTable->save();
 
         return response()->json(['success'=>'true','data'=>$dailyScrumReport],201);
     }
@@ -83,14 +70,10 @@ class DailyScrumReportController extends Controller
       $dailyTeam = DailyScrumReport::whereDate('created_at',$date)
                                 ->where('id_team',$request->id)->get('id_user');
       $memberArray= array();
-      // echo $userTeams;
-      // echo $dailyTeam;
       $i=0;
         foreach ($userTeams as $member) {
             $found = 0;
             foreach ($dailyTeam as $key) {
-              // echo $member->id_user;
-              // echo $key->id_user;
               if($member->id_user == $key->id_user)
                 $found=1;
             }
@@ -128,29 +111,29 @@ class DailyScrumReportController extends Controller
       }
     }
 
-    public function update(Request $request, DailyScrumReport $dailyScrumReport)
-    {
-        $validator = Validator::make($request->all(), [
-            'id_team' => 'required',
-            'last_24_hour_activities' => 'required',
-            'next_24_hour_activities' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 200);
-        }
-
-        $dailyScrumReport->update($request->all());
-
-        return response()->json(['success'=>'true','data'=>$dailyScrumReport],200);
-    }
-
-    public function delete(DailyScrumReport $dailyScrumReport)
-    {
-        $dailyScrumReport->delete();
-
-        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
-    }
+    // public function update(Request $request, DailyScrumReport $dailyScrumReport)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'id_team' => 'required',
+    //         'last_24_hour_activities' => 'required',
+    //         'next_24_hour_activities' => 'required',
+    //     ]);
+    //
+    //     if ($validator->fails()) {
+    //         return response()->json(['error'=>$validator->errors()], 200);
+    //     }
+    //
+    //     $dailyScrumReport->update($request->all());
+    //
+    //     return response()->json(['success'=>'true','data'=>$dailyScrumReport],200);
+    // }
+    //
+    // public function delete(DailyScrumReport $dailyScrumReport)
+    // {
+    //     $dailyScrumReport->delete();
+    //
+    //     return response()->json(['success'=>'true','message'=>'successfully delete'],200);
+    // }
 
     public function list(Request $request)
     {

@@ -131,10 +131,10 @@ class DailyTrackingReportController extends Controller
             $data['time_consumed'] = $grandTotal;
         }
         else{
-            $data['value']['time_consumed'] = 0;
-            $data['value']['productive_value'] = 0;
-            $data['value']['netral_value'] = 0;
-            $data['value']['not_productive_value'] = 0;
+            $data['time_consumed'] = 0;
+            $data['value'][0] = 0;
+            $data['value'][1] = 0;
+            $data['value'][2] = 0;
             $data['app']['productive'][0]['name'] = "nothing";
             $data['app']['productive'][0]['duration'] = "0 second";
             $data['app']['netral'][0]['name'] = "nothing";
@@ -203,10 +203,10 @@ class DailyTrackingReportController extends Controller
             $data['time_consumed'] = $grandTotal;
         }
         else{
-            $data['value']['time_consumed'] = 0;
-            $data['value']['productive_value'] = 0;
-            $data['value']['netral_value'] = 0;
-            $data['value']['not_productive_value'] = 0;
+            $data['time_consumed'] = 0;
+            $data['value'][0] = 0;
+            $data['value'][1] = 0;
+            $data['value'][2] = 0;
             $data['app']['productive'][0]['name'] = "nothing";
             $data['app']['productive'][0]['duration'] = "0 second";
             $data['app']['netral'][0]['name'] = "nothing";
@@ -312,28 +312,17 @@ class DailyTrackingReportController extends Controller
                     $data[$i] = $key['productive_value'];
                     $dailyTrackingReportId = $key['id'];
                     $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
-                    // echo $duration."-";
                     foreach ($duration as $durationItem) {
                         $totalTime = $totalTime + $durationItem['duration'];
                     }
-                    // $data[$i]['value']['netral_value'] =  $key['netral_value'];
-                    // $data[$i]['value']['not_productive_value'] =  $key['not_productive_value'];
-                    // $data[$i]['value']['date'] = $key['created_at'];
                 }
                 else{
                      $data[$i] = 0;
-                    //echo "0-";
-                    // $data[$i]['value']['netral_value'] = 0;
-                    // $data[$i]['value']['not_productive_value'] =  0;
-                    // $data[$i]['value']['date'] = $date;
                 }
             }
         }
         else{
             $data[0] = 0;
-            // $data[0]['value']['netral_value'] = 0;
-            // $data[0]['value']['not_productive_value'] = 0;
-            // $data[0]['value']['date'] = $todayDate;
         }
 
         return response()->json(['success'=>'true','data'=>$data,'total_time'=>$totalTime],200);
@@ -365,10 +354,8 @@ class DailyTrackingReportController extends Controller
                     $key = DailyTrackingReport::where('id_user', $key->id_user)->whereDate('created_at', $date)->first();
                     $totalToday+= $key['productive_value'];
                     $dailyTrackingReportId = $key['id'];
-                    //echo "\nid trakhis".$dailyTrackingReportId."->";
                     $duration = ApplicationTrackingHistory::where('id_tracking_history',$dailyTrackingReportId)->get();
                     foreach ($duration as $durationItem) {
-                        //echo "-------<<id".$durationItem['id'].">>"."<<dur".$durationItem['duration'].">>\n";
                         $totalTime = $totalTime + $durationItem['duration'];
                     }
                 }
@@ -378,7 +365,6 @@ class DailyTrackingReportController extends Controller
             $chart[$i]=$totalToday;
         }
         $average=$average/7;
-        // $averageTeam = $total/$userTeamsCount;
         return response()->json(['success'=>'true','data'=>$chart,'average'=>$average,'total_time'=>$totalTime],200);
     }
     public function overalPerTeam(Request $request)
@@ -474,8 +460,6 @@ class DailyTrackingReportController extends Controller
         }
         $keys = "value";
         sortBySubkey($memberArray, $keys);
-         //arsort($memberArray);
-        // echo $grandTotal;
         return response()->json(['success'=>'true','data'=>$memberArray],200);
     }
     public function rewardPerUser()
