@@ -457,7 +457,7 @@ class DailyTrackingReportController extends Controller
                     $app = Application::where('id',$key->id_application)->first();
                     $grandTotal+=$key->duration;
                 }
-                $memberArray[$i]['time_consumed'] = $grandTotal;
+                $memberArray[$i]['time_consumed'] = $grandTotal/3600;
             }else{
                 $memberArray[$i]['value']['productive_value'] = 0;
                 $memberArray[$i]['value']['netral_value'] = 0;
