@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@update');
     Route::delete('app-productivity-type/{AppProductivity}', 'AppProductivityTypeController@destroy');
 
-    Route::get('team', 'TeamController@index');
+    //Route::get('team', 'TeamController@index');
     Route::get('team/{team}', 'TeamController@show');
     Route::post('team', 'TeamController@store');
     Route::put('team/{team}', 'TeamController@update');
@@ -85,7 +85,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('team/join', 'TeamController@join');
     Route::post('team/team-list','TeamController@teamList');
     Route::post('team/member','TeamController@member');
-    Route::get('team/test','TeamController@test');
     Route::post('team/kick','TeamController@kick');
 
     //Route::get('user-team', 'UserTeamController@index');

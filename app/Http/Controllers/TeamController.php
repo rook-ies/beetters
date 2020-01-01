@@ -11,11 +11,11 @@ use App\Team;
 use App\UserTeam;
 class TeamController extends Controller
 {
-    public function index()
-    {
-        return response()->json(['success'=>'true','message'=>Team::all()],200);
-
-    }
+    // public function index()
+    // {
+    //     return response()->json(['success'=>'true','message'=>Team::all()],200);
+    //
+    // }
 
     public function show(Team $team)
     {
@@ -25,7 +25,6 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-        //$team = Team::create($request->all());
         $validator = Validator::make($request->all(), [
             'room_code' => 'required|unique:team,room_code',
             'room_name' => 'required',
@@ -37,15 +36,8 @@ class TeamController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);
         }
 
-        $team = new Team;
-        //$team->room_code = Str::random(10);
-        $team->room_code = $request->room_code;
-        $team->room_name = $request->room_name;
-        $team->business_hour_start = $request->business_hour_start;
-        $team->business_hour_end = $request->business_hour_end;
-        $team->save();
+        $team = Team::create($request->all());
 
-        //setalah buat langsung join
         $teamUser = new UserTeam;
         $teamUser->id_team = $team->id;
         $teamUser->id_user = Auth::guard('api')->id();
@@ -67,16 +59,7 @@ class TeamController extends Controller
            $teamArray[$i]['manager'] = User::where('id',$query)->get();
            $i++;
        }
-       //echo $teamArray;
       return response()->json(['success'=>'true','dataTeam'=>$teamArray],200);
-    }
-
-    public function test(){
-     //$userTeams = UserTeam::where('id_user',Auth::guard('api')->id())->get(['id_team']);
-      echo 'test';
-
-
-      //return response()->json(['success'=>'true','data'=>$teamArray],200);
     }
 
     public function update(Request $request, Team $team)
@@ -145,22 +128,15 @@ class TeamController extends Controller
               return response()->json(['error'=>$validator->errors()], 200);
           }
           $userTeams = UserTeam::where('id_team',$request->id)->orderBy('id_role', 'asc')->get();
-          // return $userTeams;
           $memberArray= array();
           $i=0;
           $j=0;
           $k=0;
-          // for ($i=1; $i <5 ; $i++) {
-          //
-          // }
-          $memberArray['manager']=0;;
+          $memberArray['manager']=0;
           $memberArray['frontend'][0]="";
           $memberArray['backend'][0]="";
           $memberArray['uiux'][0]="";
           foreach ($userTeams as $member) {
-              // echo $member;
-              //$memberArray[$i]['user'] = User::where('id', $member->id_user)->get();
-              //$memberArray[$i]['role'] = $member->id_role;
               if($member->id_role==1){
                   $memberArray['manager'] = User::where('id', $member->id_user)->first();
               } else if($member->id_role==2){
