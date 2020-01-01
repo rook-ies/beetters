@@ -14,50 +14,50 @@ class AppProductivityTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return response()->json(['success'=>'true','data'=>AppProductivityType::all()],200);
-    }
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 200);
-        }
-
-        $AppProductivity = AppProductivityType::create($request->all());
-
-        return response()->json(['success'=>'true','data'=>$AppProductivity],201);
-    }
-
-    public function show(AppProductivityType $AppProductivity)
-    {
-        return response()->json(['success'=>'true','data'=>$AppProductivity],200);
-    }
-
-    public function update(Request $request, AppProductivityType $AppProductivity)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 200);
-        }
-
-        $AppProductivity->update($request->all());
-
-        return response()->json(['success'=>'true','data'=>$AppProductivity],200);
-    }
-
-    public function destroy(AppProductivityType $AppProductivity)
-    {
-        $AppProductivity->delete();
-
-        return response()->json(['success'=>'true','message'=>'successfully delete'],200);
-    }
+    // public function index()
+    // {
+    //     return response()->json(['success'=>'true','data'=>AppProductivityType::all()],200);
+    // }
+    //
+    // public function store(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required'
+    //     ]);
+    //
+    //     if ($validator->fails()) {
+    //         return response()->json(['error'=>$validator->errors()], 200);
+    //     }
+    //
+    //     $AppProductivity = AppProductivityType::create($request->all());
+    //
+    //     return response()->json(['success'=>'true','data'=>$AppProductivity],201);
+    // }
+    //
+    // public function show(AppProductivityType $AppProductivity)
+    // {
+    //     return response()->json(['success'=>'true','data'=>$AppProductivity],200);
+    // }
+    //
+    // public function update(Request $request, AppProductivityType $AppProductivity)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required'
+    //     ]);
+    //
+    //     if ($validator->fails()) {
+    //         return response()->json(['error'=>$validator->errors()], 200);
+    //     }
+    //
+    //     $AppProductivity->update($request->all());
+    //
+    //     return response()->json(['success'=>'true','data'=>$AppProductivity],200);
+    // }
+    //
+    // public function destroy(AppProductivityType $AppProductivity)
+    // {
+    //     $AppProductivity->delete();
+    //
+    //     return response()->json(['success'=>'true','message'=>'successfully delete'],200);
+    // }
 }
