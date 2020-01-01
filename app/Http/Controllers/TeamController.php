@@ -11,12 +11,6 @@ use App\Team;
 use App\UserTeam;
 class TeamController extends Controller
 {
-    // public function index()
-    // {
-    //     return response()->json(['success'=>'true','message'=>Team::all()],200);
-    //
-    // }
-
     public function show(Team $team)
     {
         return response()->json(['success'=>'true','data'=>$team],200);
