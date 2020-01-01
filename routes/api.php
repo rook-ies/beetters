@@ -88,11 +88,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('team/test','TeamController@test');
     Route::post('team/kick','TeamController@kick');
 
-    Route::get('user-team', 'UserTeamController@index');
-    Route::get('user-team/{userTeam}', 'UserTeamController@show');
-    Route::post('user-team', 'UserTeamController@store');
-    Route::put('user-team/{userTeam}', 'UserTeamController@update');
-    Route::delete('user-team/{userTeam}', 'UserTeamController@delete');
+    //Route::get('user-team', 'UserTeamController@index');
+    //Route::get('user-team/{userTeam}', 'UserTeamController@show');
+    //Route::post('user-team', 'UserTeamController@store');
+    //Route::put('user-team/{userTeam}', 'UserTeamController@update');
+    //Route::delete('user-team/{userTeam}', 'UserTeamController@delete');
 
     Route::get('poke', 'PokeController@index');
     Route::get('poke/{poke}', 'PokeController@show');
