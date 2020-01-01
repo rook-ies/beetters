@@ -93,11 +93,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Route::put('user-team/{userTeam}', 'UserTeamController@update');
     //Route::delete('user-team/{userTeam}', 'UserTeamController@delete');
 
-    Route::get('poke', 'PokeController@index');
+    //Route::get('poke', 'PokeController@index');
     Route::get('poke/{poke}', 'PokeController@show');
     Route::post('poke', 'PokeController@store');
-    Route::put('poke/{poke}', 'PokeController@update');
-    Route::delete('poke/{poke}', 'PokeController@delete');
+    //Route::put('poke/{poke}', 'PokeController@update');
+    //Route::delete('poke/{poke}', 'PokeController@delete');
 
     Route::get('role', 'RoleController@index');
     Route::get('role/{role}', 'RoleController@show');
